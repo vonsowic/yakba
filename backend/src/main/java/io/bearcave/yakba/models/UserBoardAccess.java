@@ -15,9 +15,4 @@ public class UserBoardAccess {
     public UserBoardAccess(String userId) {
         this.userId = userId;
     }
-
-    public enum BoardAccessLevel {
-        USER,
-        ADMIN
-    }
 }

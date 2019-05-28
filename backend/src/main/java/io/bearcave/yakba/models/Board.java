@@ -19,7 +19,7 @@ public class Board {
         this.name = name;
 
         var access = new UserBoardAccess(ownerId);
-        access.setAccessLevel(UserBoardAccess.BoardAccessLevel.ADMIN);
+        access.setAccessLevel(BoardAccessLevel.ADMIN);
         this.accesses = Collections.singletonList(access);
     }
 }
