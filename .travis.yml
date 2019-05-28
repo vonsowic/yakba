@@ -2,8 +2,5 @@ language: java
 jdk:
   - oraclejdk11
 
-script:
-  - ./gradlew test
-
 services:
   - mongodb
