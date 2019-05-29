@@ -3,16 +3,46 @@ import {NgModule} from '@angular/core';
 
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import {BoardsComponent} from './boards/boards.component';
+import {BoardsService} from "./boards/boards.service";
+import {HttpClientModule} from "@angular/common/http";
+import {NewBoardModalComponent} from './boards/new-board-modal/new-board-modal.component';
+import {
+  MatButtonModule,
+  MatDialogModule,
+  MatFormFieldModule,
+  MatIconModule,
+  MatInputModule,
+  MatListModule,
+  MatToolbarModule
+} from "@angular/material";
+import {FormsModule} from "@angular/forms";
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    BoardsComponent,
+    NewBoardModalComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    HttpClientModule,
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    FormsModule,
+    MatListModule,
+    MatToolbarModule,
+    MatIconModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatDialogModule,
+    MatInputModule
   ],
-  providers: [],
+  entryComponents: [
+    NewBoardModalComponent
+  ],
+  providers: [BoardsService],
   bootstrap: [AppComponent]
 })
 export class AppModule {

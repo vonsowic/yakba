@@ -1,0 +1,42 @@
+import {Component, OnInit} from '@angular/core';
+import {BoardsService} from "./boards.service";
+import {Board} from "../models";
+import {NewBoardModalComponent} from "./new-board-modal/new-board-modal.component";
+import {MatDialog} from "@angular/material";
+import {flatMap} from "rxjs/operators";
+
+@Component({
+  selector: 'app-boards',
+  templateUrl: './boards.component.html',
+  styleUrls: ['./boards.component.scss']
+})
+export class BoardsComponent implements OnInit {
+
+  public boards: Board[] = [];
+
+  constructor(private boardsService: BoardsService, public dialog: MatDialog) {
+  }
+
+  ngOnInit() {
+    this.boardsService.getBoards()
+      .subscribe(boards => {
+        this.boards = boards;
+      })
+  }
+
+  public openNewBoardModal() {
+    const dialogRef = this.dialog.open(NewBoardModalComponent, {
+      width: '250px',
+      data: {name: ''}
+    });
+
+    dialogRef.afterClosed()
+      .pipe(
+        flatMap(name => this.boardsService.createNewBoard(name))
+      )
+      .subscribe(board => {
+        this.boards.push(board);
+      });
+  }
+
+}
