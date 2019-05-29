@@ -1,6 +1,6 @@
 package io.bearcave.yakba.dto;
 
-import io.bearcave.yakba.models.UserBoardAccess;
+import io.bearcave.yakba.models.BoardAccessLevel;
 import lombok.Builder;
 import lombok.Data;
 
@@ -9,5 +9,5 @@ import lombok.Data;
 public class UserBoardAccessDTO {
     private String boardId;
     private String boardName;
-    private UserBoardAccess.BoardAccessLevel access;
+    private BoardAccessLevel access;
 }

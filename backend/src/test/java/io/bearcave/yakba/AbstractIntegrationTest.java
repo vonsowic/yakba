@@ -4,9 +4,6 @@ import io.bearcave.yakba.dao.UserRepository;
 import io.bearcave.yakba.models.Board;
 import io.bearcave.yakba.models.User;
 import io.bearcave.yakba.models.UserBoardAccess;
-import io.bearcave.yakba.security.YakbaUserDetails;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
@@ -53,5 +50,9 @@ public abstract class AbstractIntegrationTest {
 
     protected User getTester() {
         return tester;
+    }
+
+    protected void TODO() {
+        throw new UnsupportedOperationException();
     }
 }

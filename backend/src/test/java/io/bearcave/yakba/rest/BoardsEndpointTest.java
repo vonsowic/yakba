@@ -1,16 +1,18 @@
 package io.bearcave.yakba.rest;
 
 import io.bearcave.yakba.AbstractIntegrationTest;
-import io.bearcave.yakba.dao.BoardAccessRepository;
 import io.bearcave.yakba.dao.BoardRepository;
+import io.bearcave.yakba.dao.UserRepository;
 import io.bearcave.yakba.models.Board;
-import io.bearcave.yakba.models.UserBoardAccess;
 import net.minidev.json.JSONArray;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.reactive.server.WebTestClient;
+import org.springframework.web.reactive.function.BodyInserters;
+
+import java.util.Collections;
 
 class BoardsEndpointTest extends AbstractIntegrationTest {
 
@@ -18,7 +20,7 @@ class BoardsEndpointTest extends AbstractIntegrationTest {
     private BoardRepository boardRepository;
 
     @Autowired
-    private BoardAccessRepository boardAccessRepository;
+    private UserRepository userRepository;
 
     @Autowired
     private WebTestClient webClient;
@@ -26,17 +28,13 @@ class BoardsEndpointTest extends AbstractIntegrationTest {
     @WithMockUser(value = AbstractIntegrationTest.TESTER_ID)
     @Test
     void returnsBoardForWhichUserHasAccess() throws Exception {
-        var board = new Board();
-        board.setName("XYZ");
+        var board = new Board("XYZ", TESTER_ID);
         boardRepository.insert(board)
                 .block();
 
         var someBoard = new Board();
         someBoard.setName("zzzzzzzzz");
         boardRepository.insert(someBoard)
-                .block();
-
-        boardAccessRepository.insert(new UserBoardAccess(getTester().getId(), board.getId()))
                 .block();
 
         webClient.get()
@@ -51,27 +49,52 @@ class BoardsEndpointTest extends AbstractIntegrationTest {
     @WithMockUser(value = AbstractIntegrationTest.TESTER_ID)
     @Test
     void shouldCreateNewBoardAndAddAdminAccessToUser() {
-
+        var boardName = "asdnfsaodnf";
+        var boardReq = Collections.singletonMap("name", boardName);
+        webClient.post()
+                .uri("/api/board")
+                .body(BodyInserters.fromObject(boardReq))
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody()
+                .jsonPath("id").isNotEmpty();
     }
 
+    @WithMockUser(value = AbstractIntegrationTest.TESTER_ID)
     @Test
-    void shouldAddUserAccess() {
-
+    void shouldNotCreateNewBoardWithoutName() {
+        var boardReq = Collections.singletonMap("name", "");
+        webClient.post()
+                .uri("/api/board")
+                .body(BodyInserters.fromObject(boardReq))
+                .exchange()
+                .expectStatus().isBadRequest();
     }
 
+    @WithMockUser(value = AbstractIntegrationTest.TESTER_ID)
     @Test
-    void shouldRemoveUserFromBoard() {
+    void shouldRemoveBoard() {
+        var board = new Board("XYZ", TESTER_ID);
+        boardRepository.insert(board)
+                .block();
 
+        webClient.delete()
+                .uri("/api/board/" + board.getId())
+                .exchange()
+                .expectStatus().isNoContent();
     }
 
+    @WithMockUser(value = AbstractIntegrationTest.TESTER_ID)
     @Test
-    void shouldRemoveBoardByAdmin() {
+    void boardCanBeRemovedJustByAdmin() {
+        var board = new Board("XYZ", "SOME OTHER USER");
+        boardRepository.insert(board)
+                .block();
 
-    }
-
-    @Test
-    void shouldNotRemoveBoardByUserWithNoAdminAccess() {
-
+        webClient.delete()
+                .uri("/api/board/" + board.getId())
+                .exchange()
+                .expectStatus().isForbidden();
     }
 
 }
