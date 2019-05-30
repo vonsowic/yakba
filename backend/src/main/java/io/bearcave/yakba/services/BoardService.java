@@ -36,12 +36,12 @@ public class BoardService {
 
     public Mono<Void> deleteBoard(String boardId, String ownerId) {
         return boardRepository.findById(boardId)
-                .map(board -> {
+                .flatMap(board -> {
                     if (!hasUserAdminAccess(board, ownerId)) {
                         throw new Forbidden();
                     }
 
-                    return Mono.empty();
+                    return boardRepository.delete(board);
                 })
                 .then();
     }

@@ -2,7 +2,6 @@ package io.bearcave.yakba.rest;
 
 import io.bearcave.yakba.AbstractIntegrationTest;
 import io.bearcave.yakba.dao.BoardRepository;
-import io.bearcave.yakba.dao.UserRepository;
 import io.bearcave.yakba.models.Board;
 import net.minidev.json.JSONArray;
 import org.junit.Assert;
@@ -14,13 +13,13 @@ import org.springframework.web.reactive.function.BodyInserters;
 
 import java.util.Collections;
 
-class BoardsEndpointTest extends AbstractIntegrationTest {
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
+
+class BoardsControllerTest extends AbstractIntegrationTest {
 
     @Autowired
     private BoardRepository boardRepository;
-
-    @Autowired
-    private UserRepository userRepository;
 
     @Autowired
     private WebTestClient webClient;
@@ -82,6 +81,9 @@ class BoardsEndpointTest extends AbstractIntegrationTest {
                 .uri("/api/board/" + board.getId())
                 .exchange()
                 .expectStatus().isNoContent();
+
+        var deletedBoard = boardRepository.findById(board.getId()).block();
+        Assert.assertThat(deletedBoard, is(nullValue()));
     }
 
     @WithMockUser(value = AbstractIntegrationTest.TESTER_ID)
