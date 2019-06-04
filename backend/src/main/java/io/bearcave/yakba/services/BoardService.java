@@ -43,11 +43,7 @@ public class BoardService {
     }
 
     public Flux<Board> getBoardsForUser(String userId) {
-        return boardRepository.findAllOverview()
-                .filter(board -> board.getAccesses()
-                        .stream()
-                        .map(UserBoardAccess::getUserId)
-                        .anyMatch(accessUserId -> Objects.equals(accessUserId, userId)));  // FIXME: optimize
+        return boardRepository.findAllByUserIdWithoutColumns(userId);
     }
 
     private boolean hasUserAdminAccess(Board board, String userId) {

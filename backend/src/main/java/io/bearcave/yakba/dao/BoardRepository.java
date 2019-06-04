@@ -9,6 +9,6 @@ import reactor.core.publisher.Flux;
 @Repository
 public interface BoardRepository extends ReactiveMongoRepository<Board, String> {
 
-    @Query(value = "{}", fields = "{columns: 0}")
-    Flux<Board> findAllOverview();
+    @Query(value = "{\"accesses.userId\": { $eq: ?0 }}}", fields = "{columns: 0}")
+    Flux<Board> findAllByUserIdWithoutColumns(String userId);
 }
