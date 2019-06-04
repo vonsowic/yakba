@@ -26,7 +26,44 @@ class BoardsControllerTest extends AbstractIntegrationTest {
 
     @WithMockUser(value = AbstractIntegrationTest.TESTER_ID)
     @Test
-    void returnsBoardForWhichUserHasAccess() throws Exception {
+    void shouldReturnOneBoardById() {
+        var board = new Board("XYZ", TESTER_ID);
+        boardRepository.insert(board)
+                .block();
+
+        webClient.get()
+                .uri("/api/board/" + board.getId())
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody()
+                .jsonPath("$").isEqualTo(board);
+    }
+
+    @WithMockUser(value = AbstractIntegrationTest.TESTER_ID)
+    @Test
+    void shouldReturnNotFoundStatusIfBoardDoesNotExist() {
+        webClient.get()
+                .uri("/api/board/someBoardId")
+                .exchange()
+                .expectStatus().isNotFound();
+    }
+
+    @WithMockUser(value = AbstractIntegrationTest.TESTER_ID)
+    @Test
+    void shouldReturnForbiddenStatusIfUserIsNotAMemberOfBoard() {
+        var board = new Board();
+        boardRepository.insert(board)
+                .block();
+
+        webClient.get()
+                .uri("/api/board/" + board.getId())
+                .exchange()
+                .expectStatus().isForbidden();
+    }
+
+    @WithMockUser(value = AbstractIntegrationTest.TESTER_ID)
+    @Test
+    void returnsBoardForWhichUserHasAccessWithoutColumns() {
         var board = new Board("XYZ", TESTER_ID);
         boardRepository.insert(board)
                 .block();
@@ -41,7 +78,8 @@ class BoardsControllerTest extends AbstractIntegrationTest {
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody()
-                    .jsonPath("$[0]").isEqualTo(board)
+                .jsonPath("$[0].name").isEqualTo(board.getName())
+                .jsonPath("$[0].columns").doesNotHaveJsonPath()
                     .jsonPath("$").value(json -> Assert.assertEquals(1, ((JSONArray) json).size()));
     }
 
