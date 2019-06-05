@@ -18,12 +18,16 @@ import {
   MatToolbarModule
 } from "@angular/material";
 import {FormsModule} from "@angular/forms";
+import {BoardComponent} from './boards/board/board.component';
+import {NotFoundComponent} from './not-found/not-found.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     BoardsComponent,
-    NewBoardModalComponent
+    NewBoardModalComponent,
+    BoardComponent,
+    NotFoundComponent
   ],
   imports: [
     BrowserModule,
