@@ -7,8 +7,6 @@ import net.minidev.json.JSONArray;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
 
 import java.util.Collections;
@@ -21,10 +19,6 @@ class BoardsControllerTest extends AbstractIntegrationTest {
     @Autowired
     private BoardRepository boardRepository;
 
-    @Autowired
-    private WebTestClient webClient;
-
-    @WithMockUser(value = AbstractIntegrationTest.TESTER_ID)
     @Test
     void shouldReturnOneBoardById() {
         var board = new Board("XYZ", TESTER_ID);
@@ -39,7 +33,6 @@ class BoardsControllerTest extends AbstractIntegrationTest {
                 .jsonPath("$").isEqualTo(board);
     }
 
-    @WithMockUser(value = AbstractIntegrationTest.TESTER_ID)
     @Test
     void shouldReturnNotFoundStatusIfBoardDoesNotExist() {
         webClient.get()
@@ -48,7 +41,6 @@ class BoardsControllerTest extends AbstractIntegrationTest {
                 .expectStatus().isNotFound();
     }
 
-    @WithMockUser(value = AbstractIntegrationTest.TESTER_ID)
     @Test
     void shouldReturnForbiddenStatusIfUserIsNotAMemberOfBoard() {
         var board = new Board();
@@ -61,7 +53,6 @@ class BoardsControllerTest extends AbstractIntegrationTest {
                 .expectStatus().isForbidden();
     }
 
-    @WithMockUser(value = AbstractIntegrationTest.TESTER_ID)
     @Test
     void returnsBoardForWhichUserHasAccessWithoutColumns() {
         var board = new Board("XYZ", TESTER_ID);
@@ -80,10 +71,9 @@ class BoardsControllerTest extends AbstractIntegrationTest {
                 .expectBody()
                 .jsonPath("$[0].name").isEqualTo(board.getName())
                 .jsonPath("$[0].columns").doesNotHaveJsonPath()
-                    .jsonPath("$").value(json -> Assert.assertEquals(1, ((JSONArray) json).size()));
+                .jsonPath("$").value(json -> Assert.assertEquals(1, ((JSONArray) json).size()));
     }
 
-    @WithMockUser(value = AbstractIntegrationTest.TESTER_ID)
     @Test
     void shouldCreateNewBoardAndAddAdminAccessToUser() {
         var boardName = "asdnfsaodnf";
@@ -97,7 +87,6 @@ class BoardsControllerTest extends AbstractIntegrationTest {
                 .jsonPath("id").isNotEmpty();
     }
 
-    @WithMockUser(value = AbstractIntegrationTest.TESTER_ID)
     @Test
     void shouldNotCreateNewBoardWithoutName() {
         var boardReq = Collections.singletonMap("name", "");
@@ -108,7 +97,6 @@ class BoardsControllerTest extends AbstractIntegrationTest {
                 .expectStatus().isBadRequest();
     }
 
-    @WithMockUser(value = AbstractIntegrationTest.TESTER_ID)
     @Test
     void shouldRemoveBoard() {
         var board = new Board("XYZ", TESTER_ID);
@@ -124,7 +112,6 @@ class BoardsControllerTest extends AbstractIntegrationTest {
         Assert.assertThat(deletedBoard, is(nullValue()));
     }
 
-    @WithMockUser(value = AbstractIntegrationTest.TESTER_ID)
     @Test
     void boardCanBeRemovedJustByAdmin() {
         var board = new Board("XYZ", "SOME OTHER USER");

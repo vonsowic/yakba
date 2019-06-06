@@ -10,8 +10,6 @@ import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
 
 import java.util.Collections;
@@ -26,8 +24,6 @@ class ColumnControllerTest extends AbstractIntegrationTest {
     @Autowired
     private BoardRepository boardRepository;
 
-    @Autowired
-    private WebTestClient webClient;
     private int columnCounter = 0;
 
     @BeforeEach
@@ -39,7 +35,6 @@ class ColumnControllerTest extends AbstractIntegrationTest {
                 .block();
     }
 
-    @WithMockUser(value = AbstractIntegrationTest.TESTER_ID)
     @Test
     void shouldAppendColumnToBoard() {
         var columnName = "TODO Column";
@@ -57,7 +52,6 @@ class ColumnControllerTest extends AbstractIntegrationTest {
                 .jsonPath("$.prevColId").doesNotHaveJsonPath();
     }
 
-    @WithMockUser(value = AbstractIntegrationTest.TESTER_ID)
     @Test
     void shouldDeleteColumn() {
         var col = column();
@@ -78,7 +72,6 @@ class ColumnControllerTest extends AbstractIntegrationTest {
         Assert.assertThat(isColumnDeleted, is(true));
     }
 
-    @WithMockUser(value = AbstractIntegrationTest.TESTER_ID)
     @Test
     void returnsNotFoundWhenBoardDoesNotExist() {
         var columnName = "TODO Column";
@@ -91,7 +84,6 @@ class ColumnControllerTest extends AbstractIntegrationTest {
                 .expectStatus().isNotFound();
     }
 
-    @WithMockUser(value = AbstractIntegrationTest.TESTER_ID)
     @Test
     void shouldReturnNotFoundStatusIfColumnDoesNotExist() {
         webClient.delete()
@@ -100,7 +92,6 @@ class ColumnControllerTest extends AbstractIntegrationTest {
                 .expectStatus().isNotFound();
     }
 
-    @WithMockUser(value = AbstractIntegrationTest.TESTER_ID)
     @Test
     void shouldChangeOrderOfColumnsByPuttingLastElementInTheMiddle() {
         var col0 = column();
@@ -121,7 +112,6 @@ class ColumnControllerTest extends AbstractIntegrationTest {
         Assert.assertThat(reorderedBoard.getColumns(), Matchers.contains(col0, col2, col1));
     }
 
-    @WithMockUser(value = AbstractIntegrationTest.TESTER_ID)
     @Test
     void shouldChangeOrderOfColumnsByPuttingFirstElementInTheMiddle() {
         var col0 = column();
@@ -142,7 +132,6 @@ class ColumnControllerTest extends AbstractIntegrationTest {
         Assert.assertThat(reorderedBoard.getColumns(), Matchers.contains(col1, col0, col2));
     }
 
-    @WithMockUser(value = AbstractIntegrationTest.TESTER_ID)
     @Test
     void shouldChangeOrderOfColumnsByPuttingFirstElementAtTheEnd() {
         var col0 = column();
@@ -163,7 +152,6 @@ class ColumnControllerTest extends AbstractIntegrationTest {
         Assert.assertThat(reorderedBoard.getColumns(), Matchers.contains(col1, col2, col0));
     }
 
-    @WithMockUser(value = AbstractIntegrationTest.TESTER_ID)
     @Test
     void shouldChangeOrderOfColumnsByPuttingLastElementAtTheBeginning() {
         var col0 = column();
@@ -184,7 +172,6 @@ class ColumnControllerTest extends AbstractIntegrationTest {
         Assert.assertThat(reorderedBoard.getColumns(), Matchers.contains(col2, col0, col1));
     }
 
-    @WithMockUser(value = AbstractIntegrationTest.TESTER_ID)
     @Test
     void shouldReturnBadRequestWhenIndexIsMinus() {
         var col0 = column();
@@ -200,7 +187,6 @@ class ColumnControllerTest extends AbstractIntegrationTest {
                 .expectStatus().isBadRequest();
     }
 
-    @WithMockUser(value = AbstractIntegrationTest.TESTER_ID)
     @Test
     void shouldReturnBadRequestWhenIndexIsBiggerThanPossible() {
         var col0 = column();
