@@ -5,7 +5,7 @@ import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {BoardsComponent} from './boards/boards.component';
-import {BoardsService} from "./boards/boards.service";
+import {BoardsService} from "./services/boards.service";
 import {HttpClientModule} from "@angular/common/http";
 import {NewBoardModalComponent} from './boards/new-board-modal/new-board-modal.component';
 import {
@@ -20,6 +20,9 @@ import {
 import {FormsModule} from "@angular/forms";
 import {BoardComponent} from './boards/board/board.component';
 import {NotFoundComponent} from './not-found/not-found.component';
+import {ColumnComponent} from './boards/board/column/column.component';
+import {CardComponent} from './boards/board/column/card/card.component';
+import {DragDropModule} from "@angular/cdk/drag-drop";
 
 @NgModule({
   declarations: [
@@ -27,7 +30,9 @@ import {NotFoundComponent} from './not-found/not-found.component';
     BoardsComponent,
     NewBoardModalComponent,
     BoardComponent,
-    NotFoundComponent
+    NotFoundComponent,
+    ColumnComponent,
+    CardComponent
   ],
   imports: [
     BrowserModule,
@@ -41,7 +46,8 @@ import {NotFoundComponent} from './not-found/not-found.component';
     MatButtonModule,
     MatFormFieldModule,
     MatDialogModule,
-    MatInputModule
+    MatInputModule,
+    DragDropModule
   ],
   entryComponents: [
     NewBoardModalComponent

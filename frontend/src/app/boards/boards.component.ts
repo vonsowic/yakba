@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {BoardsService} from "./boards.service";
+import {BoardsService} from "../services/boards.service";
 import {Board} from "../models";
 import {NewBoardModalComponent} from "./new-board-modal/new-board-modal.component";
 import {MatDialog} from "@angular/material";
