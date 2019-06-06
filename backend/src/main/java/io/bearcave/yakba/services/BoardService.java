@@ -2,6 +2,7 @@ package io.bearcave.yakba.services;
 
 import io.bearcave.yakba.dao.BoardRepository;
 import io.bearcave.yakba.exceptions.Forbidden;
+import io.bearcave.yakba.exceptions.NotFound;
 import io.bearcave.yakba.models.Board;
 import io.bearcave.yakba.models.BoardAccessLevel;
 import io.bearcave.yakba.models.UserBoardAccess;
@@ -22,12 +23,34 @@ public class BoardService {
         this.boardRepository = boardRepository;
     }
 
+    public Mono<Board> getBoardForUser(String boardId, String userId) {
+        return boardRepository.findById(boardId)
+                .switchIfEmpty(Mono.error(NotFound::new))
+                .map(board -> {
+                    if (!hasUserAccess(board, userId)) {
+                        throw new Forbidden();
+                    }
+
+                    return board;
+                });
+    }
+
+    private boolean hasUserAccess(Board board, String userId) {
+        return board.getAccesses()
+                .stream()
+                .map(UserBoardAccess::getUserId)
+                .anyMatch(id -> Objects.equals(id, userId));
+    }
+
     public Flux<Board> getBoardsForUser(String userId) {
-        return boardRepository.findAll()
-                .filter(board -> board.getAccesses()
-                        .stream()
-                        .map(UserBoardAccess::getUserId)
-                        .anyMatch(accessUserId -> Objects.equals(accessUserId, userId)));  // FIXME: optimize
+        return boardRepository.findAllByUserIdWithoutColumns(userId);
+    }
+
+    private boolean hasUserAdminAccess(Board board, String userId) {
+        return board.getAccesses()
+                .stream()
+                .filter(access -> Objects.equals(access.getAccessLevel(), BoardAccessLevel.ADMIN))
+                .anyMatch(access -> Objects.equals(access.getUserId(), userId));
     }
 
     public Mono<Board> createNewBoard(String boardName, String userId) {
@@ -36,20 +59,13 @@ public class BoardService {
 
     public Mono<Void> deleteBoard(String boardId, String ownerId) {
         return boardRepository.findById(boardId)
-                .map(board -> {
+                .flatMap(board -> {
                     if (!hasUserAdminAccess(board, ownerId)) {
                         throw new Forbidden();
                     }
 
-                    return Mono.empty();
+                    return boardRepository.delete(board);
                 })
                 .then();
-    }
-
-    private boolean hasUserAdminAccess(Board board, String userId) {
-        return board.getAccesses()
-                .stream()
-                .filter(access -> Objects.equals(access.getAccessLevel(), BoardAccessLevel.ADMIN))
-                .anyMatch(access -> Objects.equals(access.getUserId(), userId));
     }
 }

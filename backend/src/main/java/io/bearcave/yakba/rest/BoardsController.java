@@ -24,6 +24,11 @@ public class BoardsController {
         this.boardService = boardService;
     }
 
+    @GetMapping("/{boardId}")
+    public Mono<Board> getUsersBoards(@PathVariable String boardId, Principal user) {
+        return boardService.getBoardForUser(boardId, user.getName());
+    }
+
     @GetMapping
     public Flux<Board> getUsersBoards(Principal user) {
         return boardService.getBoardsForUser(user.getName());

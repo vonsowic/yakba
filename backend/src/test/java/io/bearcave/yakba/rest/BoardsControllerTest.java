@@ -2,7 +2,6 @@ package io.bearcave.yakba.rest;
 
 import io.bearcave.yakba.AbstractIntegrationTest;
 import io.bearcave.yakba.dao.BoardRepository;
-import io.bearcave.yakba.dao.UserRepository;
 import io.bearcave.yakba.models.Board;
 import net.minidev.json.JSONArray;
 import org.junit.Assert;
@@ -14,20 +13,57 @@ import org.springframework.web.reactive.function.BodyInserters;
 
 import java.util.Collections;
 
-class BoardsEndpointTest extends AbstractIntegrationTest {
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
+
+class BoardsControllerTest extends AbstractIntegrationTest {
 
     @Autowired
     private BoardRepository boardRepository;
-
-    @Autowired
-    private UserRepository userRepository;
 
     @Autowired
     private WebTestClient webClient;
 
     @WithMockUser(value = AbstractIntegrationTest.TESTER_ID)
     @Test
-    void returnsBoardForWhichUserHasAccess() throws Exception {
+    void shouldReturnOneBoardById() {
+        var board = new Board("XYZ", TESTER_ID);
+        boardRepository.insert(board)
+                .block();
+
+        webClient.get()
+                .uri("/api/board/" + board.getId())
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody()
+                .jsonPath("$").isEqualTo(board);
+    }
+
+    @WithMockUser(value = AbstractIntegrationTest.TESTER_ID)
+    @Test
+    void shouldReturnNotFoundStatusIfBoardDoesNotExist() {
+        webClient.get()
+                .uri("/api/board/someBoardId")
+                .exchange()
+                .expectStatus().isNotFound();
+    }
+
+    @WithMockUser(value = AbstractIntegrationTest.TESTER_ID)
+    @Test
+    void shouldReturnForbiddenStatusIfUserIsNotAMemberOfBoard() {
+        var board = new Board();
+        boardRepository.insert(board)
+                .block();
+
+        webClient.get()
+                .uri("/api/board/" + board.getId())
+                .exchange()
+                .expectStatus().isForbidden();
+    }
+
+    @WithMockUser(value = AbstractIntegrationTest.TESTER_ID)
+    @Test
+    void returnsBoardForWhichUserHasAccessWithoutColumns() {
         var board = new Board("XYZ", TESTER_ID);
         boardRepository.insert(board)
                 .block();
@@ -42,7 +78,8 @@ class BoardsEndpointTest extends AbstractIntegrationTest {
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody()
-                    .jsonPath("$[0]").isEqualTo(board)
+                .jsonPath("$[0].name").isEqualTo(board.getName())
+                .jsonPath("$[0].columns").doesNotHaveJsonPath()
                     .jsonPath("$").value(json -> Assert.assertEquals(1, ((JSONArray) json).size()));
     }
 
@@ -82,6 +119,9 @@ class BoardsEndpointTest extends AbstractIntegrationTest {
                 .uri("/api/board/" + board.getId())
                 .exchange()
                 .expectStatus().isNoContent();
+
+        var deletedBoard = boardRepository.findById(board.getId()).block();
+        Assert.assertThat(deletedBoard, is(nullValue()));
     }
 
     @WithMockUser(value = AbstractIntegrationTest.TESTER_ID)

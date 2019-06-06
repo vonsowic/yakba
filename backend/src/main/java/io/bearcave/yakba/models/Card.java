@@ -4,7 +4,8 @@ import lombok.Data;
 
 @Data
 public class Card {
-    String id;
-    String title;
-    String content;
+    private String id;
+    private String title;
+    private String content;
+    private String createdByUserId;
 }

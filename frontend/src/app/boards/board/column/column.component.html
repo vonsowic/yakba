@@ -1,0 +1,11 @@
+<div class="example-container">
+  <h2>{{column.name}}</h2>
+
+  <div #cards
+       (cdkDropListDropped)="drop($event)"
+       [cdkDropListData]="column.cards"
+       cdkDropList
+       class="example-list">
+    <app-card *ngFor="let card of column.cards" [card]="card" cdkDrag></app-card>
+  </div>
+</div>

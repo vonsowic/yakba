@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
-import {BoardsService} from "./boards.service";
+import {BoardsService} from "../services/boards.service";
 import {Board} from "../models";
 import {NewBoardModalComponent} from "./new-board-modal/new-board-modal.component";
 import {MatDialog} from "@angular/material";
-import {flatMap} from "rxjs/operators";
+import {filter, flatMap} from "rxjs/operators";
 
 @Component({
   selector: 'app-boards',
@@ -32,6 +32,7 @@ export class BoardsComponent implements OnInit {
 
     dialogRef.afterClosed()
       .pipe(
+        filter(name => name),
         flatMap(name => this.boardsService.createNewBoard(name))
       )
       .subscribe(board => {
