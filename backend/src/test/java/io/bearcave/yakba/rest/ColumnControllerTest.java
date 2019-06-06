@@ -103,7 +103,7 @@ class ColumnControllerTest extends AbstractIntegrationTest {
         var reorderRequest = Collections.singletonMap("index", 1);
 
         webClient.put()
-                .uri(getEndpointPath() + "/" + col2.getId())
+                .uri(getEndpointPath() + "/" + col2.getId() + "/order")
                 .body(BodyInserters.fromObject(reorderRequest))
                 .exchange()
                 .expectStatus().isAccepted();
@@ -123,7 +123,7 @@ class ColumnControllerTest extends AbstractIntegrationTest {
         var reorderRequest = Collections.singletonMap("index", 1);
 
         webClient.put()
-                .uri(getEndpointPath() + "/" + col0.getId())
+                .uri(getEndpointPath() + "/" + col0.getId() + "/order")
                 .body(BodyInserters.fromObject(reorderRequest))
                 .exchange()
                 .expectStatus().isAccepted();
@@ -143,7 +143,7 @@ class ColumnControllerTest extends AbstractIntegrationTest {
         var reorderRequest = Collections.singletonMap("index", 2);
 
         webClient.put()
-                .uri(getEndpointPath() + "/" + col0.getId())
+                .uri(getEndpointPath() + "/" + col0.getId() + "/order")
                 .body(BodyInserters.fromObject(reorderRequest))
                 .exchange()
                 .expectStatus().isAccepted();
@@ -163,7 +163,7 @@ class ColumnControllerTest extends AbstractIntegrationTest {
         var reorderRequest = Collections.singletonMap("index", 0);
 
         webClient.put()
-                .uri(getEndpointPath() + "/" + col2.getId())
+                .uri(getEndpointPath() + "/" + col2.getId() + "/order")
                 .body(BodyInserters.fromObject(reorderRequest))
                 .exchange()
                 .expectStatus().isAccepted();
@@ -181,7 +181,7 @@ class ColumnControllerTest extends AbstractIntegrationTest {
         var reorderRequest = Collections.singletonMap("index", -2);
 
         webClient.put()
-                .uri(getEndpointPath() + "/" + col0.getId())
+                .uri(getEndpointPath() + "/" + col0.getId() + "/order")
                 .body(BodyInserters.fromObject(reorderRequest))
                 .exchange()
                 .expectStatus().isBadRequest();
@@ -196,7 +196,7 @@ class ColumnControllerTest extends AbstractIntegrationTest {
         var reorderRequest = Collections.singletonMap("index", 1);
 
         webClient.put()
-                .uri(getEndpointPath() + "/" + col0.getId())
+                .uri(getEndpointPath() + "/" + col0.getId() + "/order")
                 .body(BodyInserters.fromObject(reorderRequest))
                 .exchange()
                 .expectStatus().isBadRequest();

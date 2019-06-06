@@ -47,7 +47,7 @@ public class ColumnController {
     }
 
     @ResponseStatus(HttpStatus.ACCEPTED)
-    @PutMapping("/{columnId}")
+    @PutMapping("/{columnId}/order")
     public Mono<Void> moveColumnOnRequestIndex(
             @PathVariable String boardId,
             @PathVariable String columnId,
