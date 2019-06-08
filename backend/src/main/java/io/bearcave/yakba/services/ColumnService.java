@@ -50,7 +50,9 @@ public class ColumnService {
                             .findFirst()
                             .ifPresentOrElse(
                                     column -> board.getColumns().remove(column),
-                                    () -> new NotFound(String.format("Column %s does not exist", columnId)));
+                                    () -> {
+                                        throw new NotFound(String.format("Column %s does not exist", columnId));
+                                    });
 
                     return boardRepository.save(board);
                 })
