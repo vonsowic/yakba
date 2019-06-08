@@ -4,13 +4,13 @@ package io.bearcave.yakba.exceptions;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(HttpStatus.BAD_REQUEST)
-public class BadRequest extends RuntimeException {
-    public BadRequest(String message) {
+@ResponseStatus(HttpStatus.CONFLICT)
+public class Conflict extends RuntimeException {
+    public Conflict(String message) {
         super(message);
     }
 
-    public BadRequest() {
+    public Conflict() {
         this("");
     }
 }

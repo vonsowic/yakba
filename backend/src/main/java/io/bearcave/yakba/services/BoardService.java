@@ -25,10 +25,12 @@ public class BoardService {
 
     public Mono<Board> getBoardForUser(String boardId, String userId) {
         return boardRepository.findById(boardId)
-                .switchIfEmpty(Mono.error(NotFound::new))
+                .switchIfEmpty(Mono.error(() -> new NotFound(String.format("Board %s does not exist", boardId))))
                 .map(board -> {
                     if (!hasUserAccess(board, userId)) {
-                        throw new Forbidden();
+                        throw new Forbidden(String.format(
+                                "User %s does not have access to %s[%s]", userId, board.getName(), board.getId()
+                        ));
                     }
 
                     return board;
