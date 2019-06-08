@@ -48,7 +48,11 @@ public class ColumnService {
                             .stream()
                             .filter(column -> column.getId().equals(columnId))
                             .findFirst()
-                            .ifPresentOrElse(column -> board.getColumns().remove(column), NotFound::throwNow);
+                            .ifPresentOrElse(
+                                    column -> board.getColumns().remove(column),
+                                    () -> {
+                                        throw new NotFound(String.format("Column %s does not exist", columnId));
+                                    });
 
                     return boardRepository.save(board);
                 })
