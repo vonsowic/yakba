@@ -1,17 +1,12 @@
-<div *ngIf="!board; else boardLoaded">
-  loading...
-</div>
+<mat-spinner *ngIf="!board; else boardLoaded"></mat-spinner>
 
 <ng-template #boardLoaded>
   <div>
-    <button mat-raised-button routerLink="/board">< BACK</button>
-  </div>
-  <h1>
-    {{board.name}}
-  </h1>
-  <div>
-    <div cdkDropListGroup>
-      <app-column *ngFor="let column of board.columns" [column]="column"></app-column>
+    <div cdkDropListGroup class="dashboard">
+      <div *ngFor="let column of board.columns">
+        <app-column [column]="column"></app-column>
+        <mat-divider [vertical]="true"></mat-divider>
+      </div>
     </div>
   </div>
 

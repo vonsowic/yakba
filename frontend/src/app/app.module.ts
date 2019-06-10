@@ -10,11 +10,14 @@ import {HttpClientModule} from "@angular/common/http";
 import {NewBoardModalComponent} from './boards/new-board-modal/new-board-modal.component';
 import {
   MatButtonModule,
+  MatCardModule,
   MatDialogModule,
+  MatDividerModule,
   MatFormFieldModule,
   MatIconModule,
   MatInputModule,
   MatListModule,
+  MatProgressSpinnerModule,
   MatToolbarModule
 } from "@angular/material";
 import {FormsModule} from "@angular/forms";
@@ -47,6 +50,9 @@ import {DragDropModule} from "@angular/cdk/drag-drop";
     MatFormFieldModule,
     MatDialogModule,
     MatInputModule,
+    MatCardModule,
+    MatDividerModule,
+    MatProgressSpinnerModule,
     DragDropModule
   ],
   entryComponents: [

@@ -1,21 +1,18 @@
-example-container {
-  width: 400px;
-  max-width: 100%;
-  margin: 0 25px 25px 0;
-  display: inline-block;
-  vertical-align: top;
-}
-
-.example-list {
+.column {
+  float: left;
+  min-width: 144px;
+  margin-right: 12px;
   border: solid 1px #ccc;
-  min-height: 60px;
-  max-width: 300px;
   background: white;
-  border-radius: 4px;
   overflow: hidden;
   display: block;
+  border-radius: 4px;
 }
 
+h2 {
+  padding: 12px 12px;
+  background: lightgrey;
+}
 
 .cdk-drag-preview {
   box-sizing: border-box;
@@ -33,11 +30,6 @@ example-container {
   transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 }
 
-.example-box:last-child {
-  border: none;
+.cards-list {
+  min-height: 48px;
 }
-
-.example-list.cdk-drop-list-dragging .example-box:not(.cdk-drag-placeholder) {
-  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
-}
-
