@@ -26,7 +26,7 @@ public class BoardsController {
 
     @GetMapping("/{boardId}")
     public Mono<Board> getUsersBoards(@PathVariable String boardId, Principal user) {
-        return boardService.getBoardForUser(boardId, user.getName());
+        return boardService.getBoardForUserWithoutDetails(boardId, user.getName());
     }
 
     @GetMapping
