@@ -6,6 +6,6 @@
        [cdkDropListData]="column.cards"
        cdkDropList
        class="cards-list">
-    <app-card *ngFor="let card of column.cards" [card]="card" cdkDrag></app-card>
+    <div *ngFor="let card of column.cards" cdkDrag class="card">{{card.title}}</div>
   </div>
 </div>

@@ -11,6 +11,7 @@ import {NewBoardModalComponent} from './boards/new-board-modal/new-board-modal.c
 import {
   MatButtonModule,
   MatCardModule,
+  MatCheckboxModule,
   MatDialogModule,
   MatDividerModule,
   MatFormFieldModule,
@@ -18,14 +19,16 @@ import {
   MatInputModule,
   MatListModule,
   MatProgressSpinnerModule,
+  MatSelectModule,
+  MatSidenavModule,
   MatToolbarModule
 } from "@angular/material";
 import {FormsModule} from "@angular/forms";
 import {BoardComponent} from './boards/board/board.component';
 import {NotFoundComponent} from './not-found/not-found.component';
 import {ColumnComponent} from './boards/board/column/column.component';
-import {CardComponent} from './boards/board/column/card/card.component';
 import {DragDropModule} from "@angular/cdk/drag-drop";
+import {CardFormComponent} from './boards/board/card-form/card-form.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +38,7 @@ import {DragDropModule} from "@angular/cdk/drag-drop";
     BoardComponent,
     NotFoundComponent,
     ColumnComponent,
-    CardComponent
+    CardFormComponent
   ],
   imports: [
     BrowserModule,
@@ -53,6 +56,9 @@ import {DragDropModule} from "@angular/cdk/drag-drop";
     MatCardModule,
     MatDividerModule,
     MatProgressSpinnerModule,
+    MatSidenavModule,
+    MatCheckboxModule,
+    MatSelectModule,
     DragDropModule
   ],
   entryComponents: [
