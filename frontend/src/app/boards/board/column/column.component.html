@@ -1,5 +1,10 @@
-<div class="column">
-  <h2 class="mat-h2">{{column.name}}</h2>
+<div class="column" id="{{column.id}}">
+  <div class="title">
+    <span class="mat-h2">{{column.name}}</span>
+    <mat-icon (click)="showAddCardForm()" style="float: right">add</mat-icon>
+  </div>
+
+  <app-card-form-simple #addCardForm [columnId]="column.id"></app-card-form-simple>
 
   <div #cards
        (cdkDropListDropped)="drop($event)"

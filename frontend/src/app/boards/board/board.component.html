@@ -1,13 +1,23 @@
-<mat-spinner *ngIf="!board; else boardLoaded"></mat-spinner>
+<mat-drawer-container [hasBackdrop]="false" class="example-container">
 
-<ng-template #boardLoaded>
-  <div>
-    <div cdkDropListGroup class="dashboard">
-      <div *ngFor="let column of board.columns">
-        <app-column [column]="column"></app-column>
-        <mat-divider [vertical]="true"></mat-divider>
+  <mat-drawer-content>
+    <mat-spinner *ngIf="!board; else boardLoaded"></mat-spinner>
+    <ng-template #boardLoaded>
+      <div cdkDropListGroup class="dashboard">
+        <div *ngFor="let column of board.columns">
+          <app-column [column]="column"></app-column>
+          <mat-divider [vertical]="true"></mat-divider>
+        </div>
+
+        <app-column-form-simple></app-column-form-simple>
       </div>
-    </div>
-  </div>
 
-</ng-template>
+      <!--<button mat-raised-button (click)="drawer.toggle()">Toggle drawer</button>-->
+    </ng-template>
+  </mat-drawer-content>
+
+  <mat-drawer #drawer [mode]="'side'" position="end">
+    <app-card-form></app-card-form>
+  </mat-drawer>
+
+</mat-drawer-container>

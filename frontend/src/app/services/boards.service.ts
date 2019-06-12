@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {Board} from "../models";
-import {Observable, of} from "rxjs";
+import {Board, Column, CreateCardRQ} from "../models";
+import {BehaviorSubject, Observable, of} from "rxjs";
 import {NavigationService} from "./navigation.service";
 import {catchError} from "rxjs/operators";
 
@@ -11,6 +11,9 @@ import {catchError} from "rxjs/operators";
 export class BoardsService {
 
   private readonly endpoint = '/api/board';
+
+  private _currentBoard = new BehaviorSubject<Board>(null);
+  private currentBoard = this._currentBoard.asObservable();
 
   constructor(
     private http: HttpClient,
@@ -29,7 +32,7 @@ export class BoardsService {
   }
 
   getBoard(boardId: string): Observable<Board> {
-    return this.http.get<Board>(this.endpoint + '/' + boardId)
+    this.http.get<Board>(this.endpoint + '/' + boardId)
       .pipe(
         catchError(err => {
           if (err.status === 404) {
@@ -39,5 +42,35 @@ export class BoardsService {
           return of(err);
         })
       )
+      .subscribe(board => {
+        this._currentBoard.next(board)
+      });
+
+    return this.currentBoard;
+  }
+
+  pushColumnToBoard(column: Column) {
+    this._currentBoard.getValue()
+      .columns
+      .push(column);
+
+    this._currentBoard.next(this._currentBoard.getValue())
+  }
+
+  pushCardToBoard(card: CreateCardRQ) {
+    const column = this._currentBoard.getValue()
+      .columns
+      .find(column => column.id === card.columnId);
+
+    column.cards = [card, ...column.cards];
+    this._currentBoard.next(this._currentBoard.getValue())
+  }
+
+  clearBoard() {
+    this._currentBoard.next(null);
+  }
+
+  refreshBoard() {
+    this.getBoard(this._currentBoard.getValue().id).subscribe();
   }
 }

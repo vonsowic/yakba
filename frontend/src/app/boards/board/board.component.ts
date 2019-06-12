@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {BoardsService} from "../../services/boards.service";
 import {ActivatedRoute} from "@angular/router";
 import {flatMap, map} from "rxjs/operators";
@@ -9,7 +9,7 @@ import {Board} from "../../models";
   templateUrl: './board.component.html',
   styleUrls: ['./board.component.scss']
 })
-export class BoardComponent implements OnInit {
+export class BoardComponent implements OnInit, OnDestroy {
 
   private board: Board;
 
@@ -30,4 +30,7 @@ export class BoardComponent implements OnInit {
       });
   }
 
+  ngOnDestroy(): void {
+    this.boardService.clearBoard();
+  }
 }
