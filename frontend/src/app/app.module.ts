@@ -16,6 +16,7 @@ import {
   MatDividerModule,
   MatFormFieldModule,
   MatIconModule,
+  MatIconRegistry,
   MatInputModule,
   MatListModule,
   MatProgressSpinnerModule,
@@ -29,6 +30,8 @@ import {NotFoundComponent} from './not-found/not-found.component';
 import {ColumnComponent} from './boards/board/column/column.component';
 import {DragDropModule} from "@angular/cdk/drag-drop";
 import {CardFormComponent} from './boards/board/card-form/card-form.component';
+import {CardFormSimpleComponent} from './boards/board/card-form-simple/card-form-simple.component';
+import {ColumnFormSimpleComponent} from './boards/board/column-form-simple/column-form-simple.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +41,9 @@ import {CardFormComponent} from './boards/board/card-form/card-form.component';
     BoardComponent,
     NotFoundComponent,
     ColumnComponent,
-    CardFormComponent
+    CardFormComponent,
+    CardFormSimpleComponent,
+    ColumnFormSimpleComponent
   ],
   imports: [
     BrowserModule,
@@ -64,7 +69,7 @@ import {CardFormComponent} from './boards/board/card-form/card-form.component';
   entryComponents: [
     NewBoardModalComponent
   ],
-  providers: [BoardsService],
+  providers: [BoardsService, MatIconRegistry],
   bootstrap: [AppComponent]
 })
 export class AppModule {

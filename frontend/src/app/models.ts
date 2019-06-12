@@ -10,5 +10,21 @@ export class Column {
 }
 
 export class Card {
-  public id: string;
+  public id: string = '';
+  public title: string = '';
+  public content: string = '';
+}
+
+export class CreateCardRQ extends Card {
+  public columnId: string;
+}
+
+export class CardOrderUpdateRQ {
+  public prevPos: CardPosition;
+  public nextPos: CardPosition;
+}
+
+export class CardPosition {
+  public columnId: string;
+  public index: number = 0;
 }
