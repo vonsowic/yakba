@@ -1,0 +1,10 @@
+<div *ngIf="show">
+  <mat-form-field (keydown.escape)="alert()">
+    <input (keydown.enter)="addCard()" [(ngModel)]="cardTitle" matInput placeholder="Card title">
+    <button (click)="addCard()" *ngIf="cardTitle" mat-button mat-icon-button matSuffix>
+      <mat-icon>send</mat-icon>
+    </button>
+  </mat-form-field>
+  <mat-icon (click)="hide()">expand_less</mat-icon>
+</div>
+
