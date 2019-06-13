@@ -1,36 +1,49 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {BoardsService} from "../../services/boards.service";
 import {ActivatedRoute} from "@angular/router";
-import {flatMap, map} from "rxjs/operators";
+import {flatMap} from "rxjs/operators";
 import {Board} from "../../models";
+import {BoardBaseComponent} from "../BoardBaseComponent";
+import {CardService} from "../../services/card.service";
 
 @Component({
   selector: 'app-board',
   templateUrl: './board.component.html',
   styleUrls: ['./board.component.scss']
 })
-export class BoardComponent implements OnInit, OnDestroy {
+export class BoardComponent extends BoardBaseComponent implements OnInit, OnDestroy {
 
   private board: Board;
+  private displayCardDrawer = false;
 
   constructor(
-    private route: ActivatedRoute,
-    private boardService: BoardsService
+    route: ActivatedRoute,
+    private boardService: BoardsService,
+    private cardService: CardService,
   ) {
+    super(route)
   }
 
   ngOnInit() {
-    this.route.paramMap
+    this.getBoardId()
       .pipe(
-        map(params => params.get('boardId')),
         flatMap(boardId => this.boardService.getBoard(boardId))
       )
       .subscribe(board => {
         this.board = board;
       });
+
+    this.cardDrawerOpenerListener();
   }
 
   ngOnDestroy(): void {
     this.boardService.clearBoard();
+  }
+
+  cardDrawerOpenerListener() {
+    this.cardService.getSelectedCard()
+      .subscribe(card => {
+        this.displayCardDrawer = card.id != '';
+      })
   }
 }

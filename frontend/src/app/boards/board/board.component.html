@@ -1,4 +1,4 @@
-<mat-drawer-container [hasBackdrop]="false" class="example-container">
+<mat-drawer-container (keydown.escape)="alert('asdf')" [hasBackdrop]="false" class="example-container">
 
   <mat-drawer-content>
     <mat-spinner *ngIf="!board; else boardLoaded"></mat-spinner>
@@ -12,11 +12,10 @@
         <app-column-form-simple></app-column-form-simple>
       </div>
 
-      <!--<button mat-raised-button (click)="drawer.toggle()">Toggle drawer</button>-->
     </ng-template>
   </mat-drawer-content>
 
-  <mat-drawer #drawer [mode]="'side'" position="end">
+  <mat-drawer #drawer [mode]="'side'" [opened]="displayCardDrawer" position="end">
     <app-card-form></app-card-form>
   </mat-drawer>
 
