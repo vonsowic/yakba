@@ -1,0 +1,17 @@
+<div>
+  <mat-form-field>
+    <input [(ngModel)]="card.title" matInput placeholder="Title">
+  </mat-form-field>
+
+  <mat-form-field>
+    <textarea [(ngModel)]="card.content" matInput placeholder="Content"></textarea>
+  </mat-form-field>
+
+  <button (click)="updateCard()" mat-button>Save</button>
+  <button (click)="close()" mat-button>Cancel</button>
+
+  <button (click)="deleteCard()" mat-button mat-icon-button matSuffix>
+    <mat-icon>delete</mat-icon>
+  </button>
+</div>
+

@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {Board, Column, CreateCardRQ} from "../models";
+import {Board, Card, Column, CreateCardRQ} from "../models";
 import {BehaviorSubject, Observable, of} from "rxjs";
 import {NavigationService} from "./navigation.service";
 import {catchError} from "rxjs/operators";
@@ -64,6 +64,27 @@ export class BoardsService {
 
     column.cards = [card, ...column.cards];
     this._currentBoard.next(this._currentBoard.getValue())
+  }
+
+  removeCard(cardId: string) {
+    const column = this._currentBoard.getValue()
+      .columns
+      .find(column => column.cards.find(card => card.id === cardId) !== undefined);
+
+    column.cards = column.cards.filter(card => card.id !== cardId);
+    this._currentBoard.next(this._currentBoard.getValue())
+  }
+
+  updateCard(updatedCard: Card) {
+    for (let col of this._currentBoard.getValue().columns) {
+      for (let card of col.cards) {
+        if (card.id === updatedCard.id) {
+          Object.assign(card, updatedCard);
+          this._currentBoard.next(this._currentBoard.getValue());
+          return;
+        }
+      }
+    }
   }
 
   clearBoard() {
