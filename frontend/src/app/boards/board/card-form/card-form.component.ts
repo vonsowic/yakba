@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, HostListener, OnInit} from '@angular/core';
 import {CardService} from "../../../services/card.service";
 import {Card} from "../../../models";
 import {BoardBaseComponent} from "../../BoardBaseComponent";
@@ -49,4 +49,9 @@ export class CardFormComponent extends BoardBaseComponent implements OnInit {
     this.cardService.deselectCard();
   }
 
+  @HostListener('document:keydown', ['$event']) onKeydownHandler(event: KeyboardEvent) {
+    if (event.key === "Escape") {
+      this.close();
+    }
+  }
 }
