@@ -1,4 +1,4 @@
-<div>
+<div (keydown.enter)="updateCard()">
   <mat-form-field>
     <input [(ngModel)]="card.title" matInput placeholder="Title">
   </mat-form-field>
