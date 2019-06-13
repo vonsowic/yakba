@@ -75,6 +75,12 @@ export class BoardsService {
     this._currentBoard.next(this._currentBoard.getValue())
   }
 
+  removeColumn(columnId: string) {
+    const board = this._currentBoard.getValue();
+    board.columns = board.columns.filter(column => column.id !== columnId);
+    this._currentBoard.next(board)
+  }
+
   updateCard(updatedCard: Card) {
     for (let col of this._currentBoard.getValue().columns) {
       for (let card of col.cards) {

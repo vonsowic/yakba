@@ -2,6 +2,14 @@
   <div class="title">
     <span class="mat-h2">{{column.name}}</span>
     <mat-icon (click)="showAddCardForm()" style="float: right">add</mat-icon>
+    <mat-icon [matMenuTriggerFor]="menu" style="float: right">more_vert</mat-icon>
+    <mat-menu #menu="matMenu">
+      <button (click)="deleteColumn()" mat-menu-item>Delete
+        <mat-icon>delete</mat-icon>
+      </button>
+      <button (click)="moveLeft()" mat-menu-item>Move left</button>
+      <button (click)="moveRight()" mat-menu-item>Move right</button>
+    </mat-menu>
   </div>
 
   <app-card-form-simple #addCardForm [columnId]="column.id"></app-card-form-simple>
@@ -11,6 +19,10 @@
        [cdkDropListData]="column.cards"
        cdkDropList
        class="cards-list">
-    <div *ngFor="let card of column.cards" cdkDrag class="card">{{card.title}}</div>
+    <div (click)="selectCard(card)"
+         *ngFor="let card of column.cards"
+         cdkDrag
+         class="card">{{card.title}}
+    </div>
   </div>
 </div>

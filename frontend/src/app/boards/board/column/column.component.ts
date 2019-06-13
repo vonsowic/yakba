@@ -1,15 +1,19 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
-import {Column} from "../../../models";
-import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
+import {Card, Column} from "../../../models";
+import {CdkDragDrop} from '@angular/cdk/drag-drop';
 import {CardService} from "../../../services/card.service";
 import {CardFormSimpleComponent} from "../card-form-simple/card-form-simple.component";
+import {BoardBaseComponent} from "../../BoardBaseComponent";
+import {ActivatedRoute} from "@angular/router";
+import {flatMap} from "rxjs/operators";
+import {ColumnService} from "../../../services/column.service";
 
 @Component({
   selector: 'app-column',
   templateUrl: './column.component.html',
   styleUrls: ['./column.component.scss']
 })
-export class ColumnComponent implements OnInit {
+export class ColumnComponent extends BoardBaseComponent implements OnInit {
 
   @Input()
   public column: Column;
@@ -17,7 +21,12 @@ export class ColumnComponent implements OnInit {
   @ViewChild(CardFormSimpleComponent, {static: false})
   public addCardForm: CardFormSimpleComponent;
 
-  constructor(private cardService: CardService) {
+  constructor(
+    private cardService: CardService,
+    private columnService: ColumnService,
+    route: ActivatedRoute
+  ) {
+    super(route);
   }
 
   ngOnInit() {
@@ -28,19 +37,34 @@ export class ColumnComponent implements OnInit {
 
   drop(event: CdkDragDrop<string[]>) {
     console.log(event);
-    if (event.previousContainer === event.container) {
-      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-    } else {
-      transferArrayItem(
-        event.previousContainer.data,
-        event.container.data,
-        event.previousIndex,
-        event.currentIndex);
-    }
-
+    this.cardService.handleCardDrop(event)
   }
 
   showAddCardForm() {
     this.addCardForm.show = true;
+  }
+
+  selectCard(card: Card) {
+    this.getBoardId()
+      .subscribe(boardId => {
+        this.cardService.selectCard(boardId, card)
+      })
+  }
+
+  moveLeft() {
+
+  }
+
+  moveRight() {
+
+  }
+
+  deleteColumn() {
+    this.getBoardId()
+      .pipe(
+        flatMap(boardId => this.columnService.deleteColumn(boardId, this.column.id))
+      )
+      .subscribe(() => {
+      })
   }
 }

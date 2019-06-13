@@ -19,6 +19,7 @@ import {
   MatIconRegistry,
   MatInputModule,
   MatListModule,
+  MatMenuModule,
   MatProgressSpinnerModule,
   MatSelectModule,
   MatSidenavModule,
@@ -64,6 +65,7 @@ import {ColumnFormSimpleComponent} from './boards/board/column-form-simple/colum
     MatSidenavModule,
     MatCheckboxModule,
     MatSelectModule,
+    MatMenuModule,
     DragDropModule
   ],
   entryComponents: [

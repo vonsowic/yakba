@@ -23,6 +23,9 @@ export class ColumnService {
   }
 
   deleteColumn(boardId: string, columnId: string): Observable<void> {
-    return this.http.delete<void>(`/api/board/${boardId}/column/${columnId}`);
+    return this.http.delete<void>(`/api/board/${boardId}/column/${columnId}`)
+      .pipe(tap(() => {
+        this.boardService.removeColumn(columnId)
+      }));
   }
 }
