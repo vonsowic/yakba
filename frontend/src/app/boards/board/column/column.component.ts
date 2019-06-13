@@ -52,11 +52,21 @@ export class ColumnComponent extends BoardBaseComponent implements OnInit {
   }
 
   moveLeft() {
-
+    this.getBoardId()
+      .pipe(
+        flatMap(boardId => this.columnService.moveColumnOneLeft(boardId, this.column.id))
+      )
+      .subscribe(() => {
+      })
   }
 
   moveRight() {
-
+    this.getBoardId()
+      .pipe(
+        flatMap(boardId => this.columnService.moveColumnOneRight(boardId, this.column.id))
+      )
+      .subscribe(() => {
+      })
   }
 
   deleteColumn() {

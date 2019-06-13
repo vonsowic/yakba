@@ -9,6 +9,10 @@ export class Column {
   public cards: Card[] = [];
 }
 
+export class ColumnOrderUpdateRQ {
+  public index: number;
+}
+
 export class Card {
   public id: string = '';
   public title: string = '';

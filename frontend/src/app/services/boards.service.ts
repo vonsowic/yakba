@@ -4,6 +4,7 @@ import {Board, Card, Column, CreateCardRQ} from "../models";
 import {BehaviorSubject, Observable, of} from "rxjs";
 import {NavigationService} from "./navigation.service";
 import {catchError} from "rxjs/operators";
+import arrayMove from "array-move";
 
 @Injectable({
   providedIn: 'root'
@@ -99,5 +100,17 @@ export class BoardsService {
 
   refreshBoard() {
     this.getBoard(this._currentBoard.getValue().id).subscribe();
+  }
+
+  getColumnIndex(columnId: string) {
+    return this._currentBoard.getValue()
+      .columns
+      .findIndex(column => column.id === columnId);
+  }
+
+  moveColumn(columnId: string, newPosition: number) {
+    const board = this._currentBoard.getValue();
+    arrayMove.mutate(board.columns, this.getColumnIndex(columnId), newPosition);
+    this._currentBoard.next(board)
   }
 }
