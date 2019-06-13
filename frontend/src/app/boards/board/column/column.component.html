@@ -4,11 +4,18 @@
     <mat-icon (click)="showAddCardForm()" style="float: right">add</mat-icon>
     <mat-icon [matMenuTriggerFor]="menu" style="float: right">more_vert</mat-icon>
     <mat-menu #menu="matMenu">
-      <button (click)="deleteColumn()" mat-menu-item>Delete
+      <button (click)="deleteColumn()" mat-menu-item>
+        Delete
         <mat-icon>delete</mat-icon>
       </button>
-      <button (click)="moveLeft()" mat-menu-item>Move left</button>
-      <button (click)="moveRight()" mat-menu-item>Move right</button>
+      <button (click)="moveLeft()" mat-menu-item>
+        Move left
+        <mat-icon>chevron_left</mat-icon>
+      </button>
+      <button (click)="moveRight()" mat-menu-item>
+        Move right
+        <mat-icon>chevron_right</mat-icon>
+      </button>
     </mat-menu>
   </div>
 
