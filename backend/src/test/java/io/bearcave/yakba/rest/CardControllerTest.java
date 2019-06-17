@@ -98,7 +98,7 @@ class CardControllerTest extends AbstractIntegrationTest {
                 .expectBody()
                 .jsonPath("id").isNotEmpty()
                 .jsonPath("title").isEqualTo("First task")
-                .jsonPath("content").isEmpty();
+                .jsonPath("content").doesNotHaveJsonPath();
     }
 
     @Test
