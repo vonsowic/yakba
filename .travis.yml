@@ -1,6 +1,14 @@
 language: java
+dist: trusty
 jdk:
   - oraclejdk11
 
 services:
   - mongodb
+
+addons:
+  sonarcloud:
+    organization: "vonsowic-github" # the key of the org you chose at step #3
+
+script:
+  - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar
