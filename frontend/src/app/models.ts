@@ -24,8 +24,8 @@ export class CreateCardRQ extends Card {
 }
 
 export class CardOrderUpdateRQ {
-  public prevPos: CardPosition;
-  public nextPos: CardPosition;
+  public prevPos: CardPosition = new CardPosition();
+  public nextPos: CardPosition = new CardPosition();
 }
 
 export class CardPosition {

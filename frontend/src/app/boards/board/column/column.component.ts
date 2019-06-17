@@ -36,8 +36,12 @@ export class ColumnComponent extends BoardBaseComponent implements OnInit {
   }
 
   drop(event: CdkDragDrop<string[]>) {
-    console.log(event);
-    this.cardService.handleCardDrop(event)
+    this.getBoardId()
+      .pipe(
+        flatMap(boardId => this.cardService.handleCardDrop(boardId, event))
+      )
+      .subscribe(() => {
+      });
   }
 
   showAddCardForm() {

@@ -1,9 +1,9 @@
 import {Injectable} from '@angular/core';
-import {BehaviorSubject, Observable} from "rxjs";
+import {BehaviorSubject, Observable, of} from "rxjs";
 import {Card, CardOrderUpdateRQ, CreateCardRQ} from "../models";
 import {HttpClient} from "@angular/common/http";
 import {BoardsService} from "./boards.service";
-import {tap} from "rxjs/operators";
+import {catchError, tap} from "rxjs/operators";
 import {CdkDragDrop, moveItemInArray, transferArrayItem} from "@angular/cdk/drag-drop";
 
 @Injectable({
@@ -70,7 +70,14 @@ export class CardService {
     this._selectedCard.next(new Card());
   }
 
-  handleCardDrop(event: CdkDragDrop<string[]>) {
+  handleCardDrop(boardId: string, event: CdkDragDrop<string[]>): Observable<void> {
+    const request = new CardOrderUpdateRQ();
+    request.prevPos.index = event.previousIndex;
+    request.prevPos.columnId = event.previousContainer.id;
+    request.nextPos.index = event.currentIndex;
+    request.nextPos.columnId = event.container.id;
+    const cardId = (event.previousContainer.data[request.prevPos.index]['id']);
+
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
@@ -80,5 +87,24 @@ export class CardService {
         event.previousIndex,
         event.currentIndex);
     }
+
+    return this.http.put<void>(`/api/board/${boardId}/card/${cardId}/order`, request)
+      .pipe(
+        catchError(err => {
+          if (err.status !== 409) {
+            return of(err)
+          }
+
+          if (event.previousContainer === event.container) {
+            moveItemInArray(event.container.data, event.currentIndex, event.previousIndex);
+          } else {
+            transferArrayItem(
+              event.container.data,
+              event.previousContainer.data,
+              event.currentIndex,
+              event.previousIndex);
+          }
+        })
+      )
   }
 }
