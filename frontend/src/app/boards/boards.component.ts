@@ -13,6 +13,7 @@ import {filter, flatMap} from "rxjs/operators";
 export class BoardsComponent implements OnInit {
 
   public boards: Board[] = [];
+  private loading = true;
 
   constructor(private boardsService: BoardsService, public dialog: MatDialog) {
   }
@@ -20,6 +21,7 @@ export class BoardsComponent implements OnInit {
   ngOnInit() {
     this.boardsService.getBoards()
       .subscribe(boards => {
+        this.loading = false;
         this.boards = boards;
       })
   }

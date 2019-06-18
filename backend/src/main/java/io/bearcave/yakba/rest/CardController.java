@@ -48,7 +48,7 @@ public class CardController {
             throw new BadRequest("columnId cannot be empty");
         }
 
-        var content = body.getOrDefault("content", "");
+        var content = body.get("content");
 
         var card = new Card();
         card.setTitle(title);

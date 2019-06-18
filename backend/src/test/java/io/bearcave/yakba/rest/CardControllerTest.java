@@ -98,7 +98,7 @@ class CardControllerTest extends AbstractIntegrationTest {
                 .expectBody()
                 .jsonPath("id").isNotEmpty()
                 .jsonPath("title").isEqualTo("First task")
-                .jsonPath("content").isEmpty();
+                .jsonPath("content").doesNotHaveJsonPath();
     }
 
     @Test
@@ -144,7 +144,7 @@ class CardControllerTest extends AbstractIntegrationTest {
 
     @Test
     void shouldDeleteCard() {
-        var card = card("Card to be deleted", "");
+        var card = card("Card to be deleted");
         column2.setCards(List.of(card));
         updateTestBoard();
 
@@ -158,7 +158,7 @@ class CardControllerTest extends AbstractIntegrationTest {
 
     @Test
     void shouldNotDeleteCardWhenBoardDoesNotExist() {
-        var card = card("Card to be deleted", "");
+        var card = card("Card to be deleted");
         column2.setCards(List.of(card));
         updateTestBoard();
 
@@ -185,7 +185,7 @@ class CardControllerTest extends AbstractIntegrationTest {
 
     @Test
     void shouldUpdateCardDetails() {
-        var card = card("Task", "");
+        var card = card("Task");
         column2.setCards(List.of(card));
         updateTestBoard();
 
@@ -204,9 +204,9 @@ class CardControllerTest extends AbstractIntegrationTest {
 
     @Test
     void shouldMoveCardInOneColumn() {
-        var card1 = card("Task 1", "");
-        var card2 = card("Task 2", "");
-        var card3 = card("Task 3", "");
+        var card1 = card("Task 1");
+        var card2 = card("Task 2");
+        var card3 = card("Task 3");
         column1.setCards(List.of(card1, card2, card3));
         updateTestBoard();
 
@@ -237,9 +237,9 @@ class CardControllerTest extends AbstractIntegrationTest {
 
     @Test
     void shouldMoveCardToDifferentColumn() {
-        var card1 = card("Task 1", "");
-        var card2 = card("Task 2", "");
-        var card3 = card("Task 3", "");
+        var card1 = card("Task 1");
+        var card2 = card("Task 2");
+        var card3 = card("Task 3");
         column1.setCards(List.of(card1, card2, card3));
         updateTestBoard();
 
@@ -275,8 +275,8 @@ class CardControllerTest extends AbstractIntegrationTest {
 
     @Test
     void shouldReturnConflictStatusWhenInTheMeantimeCardHasBeenMovedBySomebodyElse() {
-        var card1 = card("Task 1", "");
-        var card2 = card("Task 2", "");
+        var card1 = card("Task 1");
+        var card2 = card("Task 2");
         column1.setCards(List.of(card1, card2));
         updateTestBoard();
 
@@ -307,6 +307,10 @@ class CardControllerTest extends AbstractIntegrationTest {
         col.setId(ObjectId.get().toString());
         col.setName("col" + columnCounter++);
         return col;
+    }
+
+    private Card card(String title) {
+        return card(title, null);
     }
 
     private Card card(String title, String content) {

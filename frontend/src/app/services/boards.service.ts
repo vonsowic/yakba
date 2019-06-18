@@ -1,9 +1,10 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {Board} from "../models";
-import {Observable, of} from "rxjs";
+import {Board, Card, Column, CreateCardRQ} from "../models";
+import {BehaviorSubject, Observable, of} from "rxjs";
 import {NavigationService} from "./navigation.service";
 import {catchError} from "rxjs/operators";
+import arrayMove from "array-move";
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +12,9 @@ import {catchError} from "rxjs/operators";
 export class BoardsService {
 
   private readonly endpoint = '/api/board';
+
+  private _currentBoard = new BehaviorSubject<Board>(null);
+  private currentBoard = this._currentBoard.asObservable();
 
   constructor(
     private http: HttpClient,
@@ -29,7 +33,7 @@ export class BoardsService {
   }
 
   getBoard(boardId: string): Observable<Board> {
-    return this.http.get<Board>(this.endpoint + '/' + boardId)
+    this.http.get<Board>(this.endpoint + '/' + boardId)
       .pipe(
         catchError(err => {
           if (err.status === 404) {
@@ -39,5 +43,74 @@ export class BoardsService {
           return of(err);
         })
       )
+      .subscribe(board => {
+        this._currentBoard.next(board)
+      });
+
+    return this.currentBoard;
+  }
+
+  pushColumnToBoard(column: Column) {
+    this._currentBoard.getValue()
+      .columns
+      .push(column);
+
+    this._currentBoard.next(this._currentBoard.getValue())
+  }
+
+  pushCardToBoard(card: CreateCardRQ) {
+    const column = this._currentBoard.getValue()
+      .columns
+      .find(column => column.id === card.columnId);
+
+    column.cards = [card, ...column.cards];
+    this._currentBoard.next(this._currentBoard.getValue())
+  }
+
+  removeCard(cardId: string) {
+    const column = this._currentBoard.getValue()
+      .columns
+      .find(column => column.cards.find(card => card.id === cardId) !== undefined);
+
+    column.cards = column.cards.filter(card => card.id !== cardId);
+    this._currentBoard.next(this._currentBoard.getValue())
+  }
+
+  removeColumn(columnId: string) {
+    const board = this._currentBoard.getValue();
+    board.columns = board.columns.filter(column => column.id !== columnId);
+    this._currentBoard.next(board)
+  }
+
+  updateCard(updatedCard: Card) {
+    for (let col of this._currentBoard.getValue().columns) {
+      for (let card of col.cards) {
+        if (card.id === updatedCard.id) {
+          Object.assign(card, updatedCard);
+          this._currentBoard.next(this._currentBoard.getValue());
+          return;
+        }
+      }
+    }
+  }
+
+  clearBoard() {
+    this._currentBoard.next(null);
+  }
+
+  refreshBoard() {
+    this.getBoard(this._currentBoard.getValue().id).subscribe();
+  }
+
+  getColumnIndex(columnId: string) {
+    return this._currentBoard.getValue()
+      .columns
+      .findIndex(column => column.id === columnId);
+  }
+
+  moveColumn(columnId: string, newPosition: number) {
+    const board = this._currentBoard.getValue();
+    arrayMove.mutate(board.columns, this.getColumnIndex(columnId), newPosition);
+    this._currentBoard.next(board)
   }
 }

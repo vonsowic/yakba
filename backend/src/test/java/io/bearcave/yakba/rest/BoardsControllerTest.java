@@ -30,7 +30,7 @@ class BoardsControllerTest extends AbstractIntegrationTest {
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody()
-                .jsonPath("$").isEqualTo(board);
+                .jsonPath("$.name").isEqualTo(board.getName());
     }
 
     @Test

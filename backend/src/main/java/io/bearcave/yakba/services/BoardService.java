@@ -12,6 +12,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.Objects;
+import java.util.function.Function;
 
 @Service
 public class BoardService {
@@ -24,7 +25,15 @@ public class BoardService {
     }
 
     public Mono<Board> getBoardForUser(String boardId, String userId) {
-        return boardRepository.findById(boardId)
+        return getBoardForUser(boardId, userId, boardRepository::findById);
+    }
+
+    public Mono<Board> getBoardForUserWithoutDetails(String boardId, String userId) {
+        return getBoardForUser(boardId, userId, boardRepository::findByIdWithoutCardDetails);
+    }
+
+    private Mono<Board> getBoardForUser(String boardId, String userId, Function<String, Mono<Board>> findBoardById) {
+        return findBoardById.apply(boardId)
                 .switchIfEmpty(Mono.error(() -> new NotFound(String.format("Board %s does not exist", boardId))))
                 .map(board -> {
                     if (!hasUserAccess(board, userId)) {

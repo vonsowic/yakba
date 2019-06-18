@@ -1,0 +1,7 @@
+<mat-form-field>
+  <input (keydown.enter)="addColumn()" [(ngModel)]="columnName" matInput placeholder="Column name">
+  <button (click)="addColumn()" *ngIf="columnName" mat-button mat-icon-button matSuffix>
+    <mat-icon>send</mat-icon>
+  </button>
+</mat-form-field>
+

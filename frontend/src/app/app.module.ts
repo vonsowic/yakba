@@ -10,19 +10,29 @@ import {HttpClientModule} from "@angular/common/http";
 import {NewBoardModalComponent} from './boards/new-board-modal/new-board-modal.component';
 import {
   MatButtonModule,
+  MatCardModule,
+  MatCheckboxModule,
   MatDialogModule,
+  MatDividerModule,
   MatFormFieldModule,
   MatIconModule,
+  MatIconRegistry,
   MatInputModule,
   MatListModule,
+  MatMenuModule,
+  MatProgressSpinnerModule,
+  MatSelectModule,
+  MatSidenavModule,
   MatToolbarModule
 } from "@angular/material";
 import {FormsModule} from "@angular/forms";
 import {BoardComponent} from './boards/board/board.component';
 import {NotFoundComponent} from './not-found/not-found.component';
 import {ColumnComponent} from './boards/board/column/column.component';
-import {CardComponent} from './boards/board/column/card/card.component';
 import {DragDropModule} from "@angular/cdk/drag-drop";
+import {CardFormComponent} from './boards/board/card-form/card-form.component';
+import {CardFormSimpleComponent} from './boards/board/card-form-simple/card-form-simple.component';
+import {ColumnFormSimpleComponent} from './boards/board/column-form-simple/column-form-simple.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +42,9 @@ import {DragDropModule} from "@angular/cdk/drag-drop";
     BoardComponent,
     NotFoundComponent,
     ColumnComponent,
-    CardComponent
+    CardFormComponent,
+    CardFormSimpleComponent,
+    ColumnFormSimpleComponent
   ],
   imports: [
     BrowserModule,
@@ -47,12 +59,19 @@ import {DragDropModule} from "@angular/cdk/drag-drop";
     MatFormFieldModule,
     MatDialogModule,
     MatInputModule,
+    MatCardModule,
+    MatDividerModule,
+    MatProgressSpinnerModule,
+    MatSidenavModule,
+    MatCheckboxModule,
+    MatSelectModule,
+    MatMenuModule,
     DragDropModule
   ],
   entryComponents: [
     NewBoardModalComponent
   ],
-  providers: [BoardsService],
+  providers: [BoardsService, MatIconRegistry],
   bootstrap: [AppComponent]
 })
 export class AppModule {
