@@ -5,11 +5,3 @@ jdk:
 
 services:
   - mongodb
-
-addons:
-  sonarcloud:
-    organization: "vonsowic-github" # the key of the org you chose at step #3
-    token:
-      secure: "gbPmcrTqWs80tZDv/brIMp7PIiVyya096/Wr8NBSTxtzmPR9VaFRfAAlvdL81fuv95dYbgeEWtqZFZ8uW+deFYSjn/arxgluJAPMYA2J3zl7ri+q2Bw858uLOK9ZjRiiUDzB2KRVIAg+RrVqPL66WUUT2jEVzUa0Y+XM8I8j7OpQQTJCjUGTNQnigYfDbIT87hcRqjvTE0G+1K347a/7cQHfdXwHR8NU0lZZazHVVa1mCaSFuA+kVbFGI2yg66N8GLBK6ag0CBsaanBozjJXvsw3LOErvHTIGie9tqON76ffOe7iF4BQbcd3+uJGJP78JA5MDMjNQd5yYW4+eY78HO3Qh/sC0qqbaaOzoJ8lu9b0R9LSz6asFgFlf78NTudqCmVSdyAvlhNBc3SX9Y5irFYzOPfEVAYDitZc77Fa2oa8R7jv6svXp2QIuB6BAPUj4jaLD9Ld23ug2aI8YH4+AxUD6HGJhXsBxeR2i1Ri5H3/Hkt420AV2t015w2IRlU2dr7JXtwz8hqHYChkNV+TUwHWO5H1GF2X/dsbtQcU/psB9DcQ9toVVFIy5+KCLuwrHtNSTcwbu6Qf3qBfatZoBV+yJvDbg+udmehYjFwCnf3YJbfRbOvBxn5+MzowmbD5NlARcYluEuscIxwXACZUz9YI8BHBVQ/CbD26MbRmi3E="
-script:
-  - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar
