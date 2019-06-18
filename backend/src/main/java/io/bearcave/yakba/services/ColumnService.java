@@ -1,7 +1,7 @@
 package io.bearcave.yakba.services;
 
 import io.bearcave.yakba.dao.BoardRepository;
-import io.bearcave.yakba.dto.ColumnReorderRequestDTO;
+import io.bearcave.yakba.dto.ColumnReorderRequestRQ;
 import io.bearcave.yakba.exceptions.BadRequest;
 import io.bearcave.yakba.exceptions.NotFound;
 import io.bearcave.yakba.models.Board;
@@ -59,7 +59,7 @@ public class ColumnService {
                 .then();
     }
 
-    public Mono<Void> reorderColumnAsUser(ColumnReorderRequestDTO reorderRequest, String userId) {
+    public Mono<Void> reorderColumnAsUser(ColumnReorderRequestRQ reorderRequest, String userId) {
         return boardService.getBoardForUser(reorderRequest.getBoardId(), userId)
                 .flatMap(board -> {
                     var columns = board.getColumns();

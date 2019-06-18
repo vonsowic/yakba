@@ -1,7 +1,7 @@
 package io.bearcave.yakba.services;
 
 import io.bearcave.yakba.dao.BoardRepository;
-import io.bearcave.yakba.dto.CardOrderUpdateDTO;
+import io.bearcave.yakba.dto.CardOrderUpdateRQ;
 import io.bearcave.yakba.exceptions.BadRequest;
 import io.bearcave.yakba.exceptions.Conflict;
 import io.bearcave.yakba.exceptions.NotFound;
@@ -96,7 +96,7 @@ public class CardService {
                 .then();
     }
 
-    public Mono<Void> moveCardFromBoardForUserUsing(String cardId, String boardId, String userId, CardOrderUpdateDTO orderUpdate) {
+    public Mono<Void> moveCardFromBoardForUserUsing(String cardId, String boardId, String userId, CardOrderUpdateRQ orderUpdate) {
         return boardService.getBoardForUser(boardId, userId)
                 .flatMap(board -> {
                     var prevColCards = getColumnById(board, orderUpdate.getPrevPos().getColumnId())

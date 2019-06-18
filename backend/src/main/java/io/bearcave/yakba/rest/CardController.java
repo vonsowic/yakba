@@ -1,6 +1,6 @@
 package io.bearcave.yakba.rest;
 
-import io.bearcave.yakba.dto.CardOrderUpdateDTO;
+import io.bearcave.yakba.dto.CardOrderUpdateRQ;
 import io.bearcave.yakba.exceptions.BadRequest;
 import io.bearcave.yakba.models.Card;
 import io.bearcave.yakba.services.CardService;
@@ -82,7 +82,7 @@ public class CardController {
     public Mono<Void> moveCard(
             @PathVariable String boardId,
             @PathVariable String cardId,
-            @RequestBody CardOrderUpdateDTO body,
+            @RequestBody CardOrderUpdateRQ body,
             Principal user) {
         return cardService.moveCardFromBoardForUserUsing(cardId, boardId, user.getName(), body);
     }

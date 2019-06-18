@@ -2,8 +2,8 @@ package io.bearcave.yakba.rest;
 
 import io.bearcave.yakba.AbstractIntegrationTest;
 import io.bearcave.yakba.dao.BoardRepository;
-import io.bearcave.yakba.dto.CardOrderUpdateDTO;
-import io.bearcave.yakba.dto.CardPositionDTO;
+import io.bearcave.yakba.dto.CardOrderUpdateRQ;
+import io.bearcave.yakba.dto.CardPosition;
 import io.bearcave.yakba.models.Board;
 import io.bearcave.yakba.models.Card;
 import io.bearcave.yakba.models.Column;
@@ -210,15 +210,15 @@ class CardControllerTest extends AbstractIntegrationTest {
         column1.setCards(List.of(card1, card2, card3));
         updateTestBoard();
 
-        var prevPos = new CardPositionDTO();
+        var prevPos = new CardPosition();
         prevPos.setColumnId(column1.getId());
         prevPos.setIndex(0);
 
-        var nextPos = new CardPositionDTO();
+        var nextPos = new CardPosition();
         nextPos.setColumnId(column1.getId());
         nextPos.setIndex(2);
 
-        var request = new CardOrderUpdateDTO();
+        var request = new CardOrderUpdateRQ();
         request.setPrevPos(prevPos);
         request.setNextPos(nextPos);
 
@@ -243,14 +243,14 @@ class CardControllerTest extends AbstractIntegrationTest {
         column1.setCards(List.of(card1, card2, card3));
         updateTestBoard();
 
-        var prevPos = new CardPositionDTO();
+        var prevPos = new CardPosition();
         prevPos.setColumnId(column1.getId());
         prevPos.setIndex(1);
 
-        var nextPos = new CardPositionDTO();
+        var nextPos = new CardPosition();
         nextPos.setColumnId(column2.getId());
 
-        var request = new CardOrderUpdateDTO();
+        var request = new CardOrderUpdateRQ();
         request.setPrevPos(prevPos);
         request.setNextPos(nextPos);
 
@@ -280,14 +280,14 @@ class CardControllerTest extends AbstractIntegrationTest {
         column1.setCards(List.of(card1, card2));
         updateTestBoard();
 
-        var prevPos = new CardPositionDTO();
+        var prevPos = new CardPosition();
         prevPos.setColumnId(column1.getId());
         prevPos.setIndex(1);
 
-        var nextPos = new CardPositionDTO();
+        var nextPos = new CardPosition();
         nextPos.setColumnId(column1.getId());
 
-        var request = new CardOrderUpdateDTO();
+        var request = new CardOrderUpdateRQ();
         request.setPrevPos(prevPos);
         request.setNextPos(nextPos);
 
