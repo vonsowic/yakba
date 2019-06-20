@@ -10,12 +10,10 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
 @RunWith(SpringRunner.class)
-@WithMockUser(value = AbstractIntegrationTest.TESTER_ID)
 @SpringBootTest(classes = YakbaApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public abstract class AbstractIntegrationTest {
 
@@ -39,6 +37,7 @@ public abstract class AbstractIntegrationTest {
         tester = new User();
         tester.setId(TESTER_ID);
         tester.setUsername("test");
+        tester.setEmail("test@test.com");
         tester.setPassword("password");
         userRepository.insert(tester).block();
     }
@@ -56,9 +55,5 @@ public abstract class AbstractIntegrationTest {
 
     protected User getTester() {
         return tester;
-    }
-
-    protected void TODO() {
-        throw new UnsupportedOperationException();
     }
 }

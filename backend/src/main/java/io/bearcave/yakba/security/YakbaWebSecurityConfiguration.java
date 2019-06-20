@@ -2,6 +2,7 @@ package io.bearcave.yakba.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableReactiveMethodSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.core.userdetails.MapReactiveUserDetailsService;
@@ -18,8 +19,8 @@ public class YakbaWebSecurityConfiguration {
     @Bean
     public MapReactiveUserDetailsService userDetailsService() {
         UserDetails user = User.withDefaultPasswordEncoder()
-                .username("5cb63d9bfb24ae3fc2310ba4")
-                .password("test")
+                .username("test")
+                .password("$2a$10$YpwhRJQOomu3envfJBxcfuA9M.o5wlAn.KqoOk0B5WvwgBY4hJUFS")
                 .roles("USER")
                 .build();
         return new MapReactiveUserDetailsService(user);
@@ -29,18 +30,16 @@ public class YakbaWebSecurityConfiguration {
     public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
         return http
                 .authorizeExchange()
-                .pathMatchers("/api/user/registration", "/logout", "/login").permitAll()
+                .pathMatchers(HttpMethod.POST, "/api/user").permitAll()
                 .anyExchange().authenticated()
                 .and()
                 .csrf().disable()
-                .httpBasic().and()
-                .formLogin().and()
                 .build();
     }
 
-//    @Bean
-//    public PasswordEncoder passwordEncoder() {
-//        return new BCryptPasswordEncoder();
-//    }
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
 }
