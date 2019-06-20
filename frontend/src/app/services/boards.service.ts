@@ -3,7 +3,7 @@ import {HttpClient} from "@angular/common/http";
 import {Board, Card, Column, CreateCardRQ} from "../models";
 import {BehaviorSubject, Observable, of} from "rxjs";
 import {NavigationService} from "./navigation.service";
-import {catchError} from "rxjs/operators";
+import {catchError, map} from "rxjs/operators";
 import arrayMove from "array-move";
 
 @Injectable({
@@ -35,6 +35,7 @@ export class BoardsService {
   getBoard(boardId: string): Observable<Board> {
     this.http.get<Board>(this.endpoint + '/' + boardId)
       .pipe(
+        map(board => Object.assign({columns: []}, board)),
         catchError(err => {
           if (err.status === 404) {
             return this.navigationService.goToNotFound();
