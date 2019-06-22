@@ -24,21 +24,21 @@ public class BoardService {
         this.boardRepository = boardRepository;
     }
 
-    public Mono<Board> getBoardForUser(String boardId, String userId) {
-        return getBoardForUser(boardId, userId, boardRepository::findById);
+    public Mono<Board> getBoardForUser(String boardId, String username) {
+        return getBoardForUser(boardId, username, boardRepository::findById);
     }
 
     public Mono<Board> getBoardForUserWithoutDetails(String boardId, String userId) {
         return getBoardForUser(boardId, userId, boardRepository::findByIdWithoutCardDetails);
     }
 
-    private Mono<Board> getBoardForUser(String boardId, String userId, Function<String, Mono<Board>> findBoardById) {
+    private Mono<Board> getBoardForUser(String boardId, String username, Function<String, Mono<Board>> findBoardById) {
         return findBoardById.apply(boardId)
                 .switchIfEmpty(Mono.error(() -> new NotFound(String.format("Board %s does not exist", boardId))))
                 .map(board -> {
-                    if (!hasUserAccess(board, userId)) {
+                    if (!hasUserAccess(board, username)) {
                         throw new Forbidden(String.format(
-                                "User %s does not have access to %s[%s]", userId, board.getName(), board.getId()
+                                "User %s does not have access to %s[%s]", username, board.getName(), board.getId()
                         ));
                     }
 
@@ -46,15 +46,15 @@ public class BoardService {
                 });
     }
 
-    private boolean hasUserAccess(Board board, String userId) {
+    private boolean hasUserAccess(Board board, String username) {
         return board.getAccesses()
                 .stream()
                 .map(UserBoardAccess::getUserId)
-                .anyMatch(id -> Objects.equals(id, userId));
+                .anyMatch(id -> Objects.equals(id, username));
     }
 
     public Flux<Board> getBoardsForUser(String userId) {
-        return boardRepository.findAllByUserIdWithoutColumns(userId);
+        return boardRepository.findAllByUsernameWithoutColumns(userId);
     }
 
     private boolean hasUserAdminAccess(Board board, String userId) {
@@ -64,8 +64,8 @@ public class BoardService {
                 .anyMatch(access -> Objects.equals(access.getUserId(), userId));
     }
 
-    public Mono<Board> createNewBoard(String boardName, String userId) {
-        return boardRepository.insert(new Board(boardName, userId));
+    public Mono<Board> createNewBoard(String boardName, String username) {
+        return boardRepository.insert(new Board(boardName, username));
     }
 
     public Mono<Void> deleteBoard(String boardId, String ownerId) {
