@@ -10,7 +10,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.authentication.HttpStatusServerEntryPoint;
-import org.springframework.security.web.server.authentication.WebFilterChainServerAuthenticationSuccessHandler;
+import org.springframework.security.web.server.authentication.ServerAuthenticationSuccessHandler;
+import org.springframework.security.web.server.authentication.logout.ServerLogoutSuccessHandler;
 import reactor.core.publisher.Mono;
 
 @Configuration
@@ -27,16 +28,25 @@ public class YakbaWebSecurityConfiguration {
                 .csrf().disable()
                 .formLogin()
                 .loginPage("/api/login")
-                .authenticationSuccessHandler(new WebFilterChainServerAuthenticationSuccessHandler())
+                .authenticationSuccessHandler(loginSuccessHandler())
                 .and()
                 .logout()
                 .logoutUrl("/api/logout")
+                .logoutSuccessHandler(logoutSuccessHandler())
                 .and()
                 .exceptionHandling()
                 .authenticationEntryPoint(new HttpStatusServerEntryPoint(HttpStatus.UNAUTHORIZED))
                 .accessDeniedHandler((swe, e) -> Mono.fromRunnable(() -> swe.getResponse().setStatusCode(HttpStatus.FORBIDDEN)))
                 .and()
                 .build();
+    }
+
+    private ServerAuthenticationSuccessHandler loginSuccessHandler() {
+        return (webFilterExchange, authentication) -> Mono.empty().then();
+    }
+
+    private ServerLogoutSuccessHandler logoutSuccessHandler() {
+        return (webFilterExchange, authentication) -> Mono.empty().then();
     }
 
     @Bean

@@ -22,7 +22,7 @@ export class RegistrationComponent implements OnInit {
   createNewAccount() {
     this.authService.register(this.signupForm)
       .subscribe(() => {
-        this.router.navigateByUrl('/')
+        this.router.navigate(['/'])
       })
   }
 }

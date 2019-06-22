@@ -14,24 +14,17 @@ export class AuthService {
   constructor(private http: HttpClient) {
   }
 
-  loginUser(username: string, password: string): Observable<User> {
+  loginUser(username: string, password: string): Observable<void> {
     const body = new HttpParams()
       .set('username', username)
       .set('password', password);
 
-    return this.http.post<User>('/api/login', body)
+    return this.http.post<void>('/api/login', body)
       .pipe(
-        tap(user => {
-          this.username.next(user.username);
+        tap(() => {
+          this.fetchUsernameIfAuthenticated()
         })
       )
-  }
-
-  fetchUsernameIfAuthenticated(): void {
-    this.http.get<User>('/api/login')
-      .subscribe(user => {
-        this.username.next(user.username);
-      })
   }
 
   getUsername() {
@@ -44,11 +37,18 @@ export class AuthService {
         }));
   }
 
-  logout(): Observable<any> {
-    return this.http.get('/api/logout')
+  fetchUsernameIfAuthenticated(): void {
+    this.http.get<User>('/api/user')
+      .subscribe(user => {
+        this.username.next(user.username);
+      })
   }
 
-  register(req: SignUpRQ): Observable<User> {
+  logout(): Observable<any> {
+    return this.http.post('/api/logout', {})
+  }
+
+  register(req: SignUpRQ): Observable<void> {
     return this.http.post<void>('/api/user', req)
       .pipe(
         flatMap(() => this.loginUser(req.username, req.password))

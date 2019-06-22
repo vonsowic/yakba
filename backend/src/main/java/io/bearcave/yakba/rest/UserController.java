@@ -8,6 +8,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
+import java.security.Principal;
+import java.util.Collections;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
@@ -17,6 +21,13 @@ public class UserController {
     @Autowired
     public UserController(UserService userService) {
         this.userService = userService;
+    }
+
+    @GetMapping
+    public Mono<Map<String, String>> me(Mono<Principal> user) {
+        return user
+                .map(Principal::getName)
+                .map(username -> Collections.singletonMap("username", username));
     }
 
     @ResponseStatus(HttpStatus.CREATED)
