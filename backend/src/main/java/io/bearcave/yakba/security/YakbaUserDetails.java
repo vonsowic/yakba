@@ -9,8 +9,9 @@ import java.util.Collections;
 
 public class YakbaUserDetails implements UserDetails {
 
-    private String id;
+    private String username;
     private String password;
+    private boolean enabled;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -22,9 +23,10 @@ public class YakbaUserDetails implements UserDetails {
         return password;
     }
 
-    @Override
-    public String getUsername() {
-        return id;
+    private YakbaUserDetails(String username, String password, boolean enabled) {
+        this.username = username;
+        this.password = password;
+        this.enabled = enabled;
     }
 
     @Override
@@ -42,19 +44,20 @@ public class YakbaUserDetails implements UserDetails {
         return false;
     }
 
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
-
-    private YakbaUserDetails(String id, String password) {
-        this.id = id;
-        this.password = password;
-    }
-
     public static UserDetails from(User dbUser) {
         return new YakbaUserDetails(
-                dbUser.getId(),
-                dbUser.getPassword());
+                dbUser.getUsername(),
+                dbUser.getPassword(),
+                dbUser.isEnabled());
+    }
+
+    @Override
+    public String getUsername() {
+        return username;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return enabled;
     }
 }

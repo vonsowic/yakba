@@ -1,6 +1,6 @@
 package io.bearcave.yakba.rest;
 
-import io.bearcave.yakba.dto.ColumnReorderRequestDTO;
+import io.bearcave.yakba.dto.ColumnReorderRequestRQ;
 import io.bearcave.yakba.exceptions.BadRequest;
 import io.bearcave.yakba.models.Column;
 import io.bearcave.yakba.services.ColumnService;
@@ -58,7 +58,7 @@ public class ColumnController {
             throw new BadRequest();
         }
 
-        var reorderRequest = new ColumnReorderRequestDTO();
+        var reorderRequest = new ColumnReorderRequestRQ();
         reorderRequest.setBoardId(boardId);
         reorderRequest.setColumnId(columnId);
         reorderRequest.setIndex(index);

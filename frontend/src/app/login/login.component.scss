@@ -1,0 +1,10 @@
+div {
+  display: flex;
+  flex-direction: column;
+  padding: 12px 12px;
+  max-width: 256px;
+}
+
+div > * {
+  width: 100%;
+}

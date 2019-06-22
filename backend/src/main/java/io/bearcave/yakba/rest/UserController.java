@@ -1,38 +1,42 @@
 package io.bearcave.yakba.rest;
 
-import io.bearcave.yakba.dao.UserRepository;
-import io.bearcave.yakba.dto.AuthDTO;
-import io.bearcave.yakba.models.User;
+import io.bearcave.yakba.dto.CreateUserRQ;
+import io.bearcave.yakba.exceptions.BadRequest;
+import io.bearcave.yakba.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCrypt;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
-import java.net.URI;
+import java.security.Principal;
+import java.util.Collections;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
 
-    private final UserRepository userRepository;
+    private final UserService userService;
 
     @Autowired
-    public UserController(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
 
-    @PostMapping("/registration")
-    public Mono<ResponseEntity> registerNewUser(@RequestBody AuthDTO auth) {
-        var newUser = new User();
-        newUser.setUsername(auth.getUsername());
-        newUser.setPassword(BCrypt.hashpw(auth.getPassword(), BCrypt.gensalt()));
-        return this.userRepository.save(newUser)
-                .map(user -> ResponseEntity.created(URI.create("/api/user/login")).build())
-                .onErrorReturn(new ResponseEntity(HttpStatus.CONFLICT));
+    @GetMapping
+    public Mono<Map<String, String>> me(Mono<Principal> user) {
+        return user
+                .map(Principal::getName)
+                .map(username -> Collections.singletonMap("username", username));
+    }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping
+    public Mono<Void> registerNewUser(@RequestBody CreateUserRQ createUserRQ) {
+        if (!createUserRQ.isNotEmpty()) {
+            throw new BadRequest();
+        }
+
+        return userService.registerNewUser(createUserRQ);
     }
 }

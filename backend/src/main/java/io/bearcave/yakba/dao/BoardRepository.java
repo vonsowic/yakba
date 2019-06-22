@@ -11,7 +11,7 @@ import reactor.core.publisher.Mono;
 public interface BoardRepository extends ReactiveMongoRepository<Board, String> {
 
     @Query(value = "{\"accesses.userId\": { $eq: ?0 }}}", fields = "{columns: 0}")
-    Flux<Board> findAllByUserIdWithoutColumns(String userId);
+    Flux<Board> findAllByUsernameWithoutColumns(String username);
 
     @Query(value = "{_id: ?0}", fields = "{\"columns.cards.content\": 0, \"columns.cards.createdByUserId\": 0}")
     Mono<Board> findByIdWithoutCardDetails(String boardId);

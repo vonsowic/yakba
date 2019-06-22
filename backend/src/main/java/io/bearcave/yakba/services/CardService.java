@@ -1,7 +1,7 @@
 package io.bearcave.yakba.services;
 
 import io.bearcave.yakba.dao.BoardRepository;
-import io.bearcave.yakba.dto.CardOrderUpdateDTO;
+import io.bearcave.yakba.dto.CardOrderUpdateRQ;
 import io.bearcave.yakba.exceptions.BadRequest;
 import io.bearcave.yakba.exceptions.Conflict;
 import io.bearcave.yakba.exceptions.NotFound;
@@ -29,8 +29,8 @@ public class CardService {
         this.boardService = boardService;
     }
 
-    public Mono<Card> findCardByIdForUser(String boardId, String cardId, String userId) {
-        return boardService.getBoardForUser(boardId, userId)
+    public Mono<Card> findCardByIdForUser(String boardId, String cardId, String username) {
+        return boardService.getBoardForUser(boardId, username)
                 .map(Board::getColumns)
                 .map(Collection::stream)
                 .map(columns -> columns.flatMap(column -> column.getCards().stream()))
@@ -41,8 +41,8 @@ public class CardService {
                         .orElseThrow(NotFound::new));
     }
 
-    public Mono<Card> addCardToBoardForUser(Card card, String columnId, String boardId, String userId) {
-        return boardService.getBoardForUser(boardId, userId)
+    public Mono<Card> addCardToBoardForUser(Card card, String columnId, String boardId, String username) {
+        return boardService.getBoardForUser(boardId, username)
                 .flatMap(board -> {
                     var column = getColumnById(board, columnId)
                             .orElseThrow(() -> new NotFound(String.format(
@@ -58,8 +58,8 @@ public class CardService {
                 });
     }
 
-    public Mono<Void> deleteCardFromBoardForUser(String cardId, String boardId, String userId) {
-        return boardService.getBoardForUser(boardId, userId)
+    public Mono<Void> deleteCardFromBoardForUser(String cardId, String boardId, String username) {
+        return boardService.getBoardForUser(boardId, username)
                 .flatMap(board -> {
                     var column = board.getColumns()
                             .stream()
@@ -75,8 +75,8 @@ public class CardService {
                 .then();
     }
 
-    public Mono<Void> updateCardForUser(Card updatedCard, String boardId, String userId) {
-        return boardService.getBoardForUser(boardId, userId)
+    public Mono<Void> updateCardForUser(Card updatedCard, String boardId, String username) {
+        return boardService.getBoardForUser(boardId, username)
                 .flatMap(board -> {
                     var dbCard = getCardById(board, updatedCard.getId())
                             .orElseThrow(() -> new NotFound(String.format(
@@ -96,8 +96,8 @@ public class CardService {
                 .then();
     }
 
-    public Mono<Void> moveCardFromBoardForUserUsing(String cardId, String boardId, String userId, CardOrderUpdateDTO orderUpdate) {
-        return boardService.getBoardForUser(boardId, userId)
+    public Mono<Void> moveCardFromBoardForUserUsing(String cardId, String boardId, String username, CardOrderUpdateRQ orderUpdate) {
+        return boardService.getBoardForUser(boardId, username)
                 .flatMap(board -> {
                     var prevColCards = getColumnById(board, orderUpdate.getPrevPos().getColumnId())
                             .map(Column::getCards)

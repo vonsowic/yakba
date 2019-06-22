@@ -6,7 +6,6 @@ import lombok.Data;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 @Data
 public class Column {
@@ -15,8 +14,4 @@ public class Column {
 
     @JsonInclude(Include.NON_EMPTY)
     private List<Card> cards = Collections.emptyList();
-
-    public boolean idEquals(String id) {
-        return Objects.equals(this.id, id);
-    }
 }

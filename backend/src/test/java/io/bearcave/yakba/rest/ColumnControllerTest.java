@@ -10,6 +10,7 @@ import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.web.reactive.function.BodyInserters;
 
 import java.util.Collections;
@@ -17,6 +18,7 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.is;
 
+@WithMockUser(value = AbstractIntegrationTest.TESTER_ID)
 class ColumnControllerTest extends AbstractIntegrationTest {
 
     private Board board;

@@ -1,5 +1,7 @@
 <mat-spinner *ngIf="loading"></mat-spinner>
 
+<span *ngIf="!boards.length" class="mat-typography">Currently you do not have access to any board</span>
+
 <mat-list>
   <mat-list-item *ngFor="let board of boards" routerLink="/board/{{board.id}}"> {{ board.name }}</mat-list-item>
 </mat-list>

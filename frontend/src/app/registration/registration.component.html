@@ -1,0 +1,26 @@
+<div>
+  <mat-form-field>
+    <input [(ngModel)]="signupForm.email" matInput placeholder="Email">
+  </mat-form-field>
+
+  <mat-form-field>
+    <input [(ngModel)]="signupForm.username" matInput placeholder="Username">
+  </mat-form-field>
+
+  <mat-form-field>
+    <input [(ngModel)]="signupForm.password"
+           [type]="hidePassword ? 'password' : 'text'"
+           matInput
+           placeholder="Password">
+    <button (click)="hidePassword = !hidePassword"
+            [attr.aria-label]="'Hide password'"
+            [attr.aria-pressed]="hidePassword"
+            mat-icon-button
+            matSuffix>
+      <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+    </button>
+  </mat-form-field>
+
+  <button (click)="createNewAccount()" mat-button>Register</button>
+  <a routerLink="/login">Already have an account? Sign in</a>
+</div>

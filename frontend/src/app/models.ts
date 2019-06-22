@@ -32,3 +32,9 @@ export class CardPosition {
   public columnId: string;
   public index: number = 0;
 }
+
+export class SignUpRQ {
+  public username: string;
+  public email: string;
+  public password: string;
+}

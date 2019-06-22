@@ -1,7 +1,7 @@
 package io.bearcave.yakba.services;
 
 import io.bearcave.yakba.dao.BoardRepository;
-import io.bearcave.yakba.dto.ColumnReorderRequestDTO;
+import io.bearcave.yakba.dto.ColumnReorderRequestRQ;
 import io.bearcave.yakba.exceptions.BadRequest;
 import io.bearcave.yakba.exceptions.NotFound;
 import io.bearcave.yakba.models.Board;
@@ -27,12 +27,12 @@ public class ColumnService {
         this.boardService = boardService;
     }
 
-    public Mono<Column> addColumnToBoardAsUser(String columnName, String boardId, String userId) {
+    public Mono<Column> addColumnToBoardAsUser(String columnName, String boardId, String username) {
         var newColumn = new Column();
         newColumn.setId(ObjectId.get().toString());
         newColumn.setName(columnName);
 
-        return boardService.getBoardForUser(boardId, userId)
+        return boardService.getBoardForUser(boardId, username)
                 .flatMap(board -> {
                     board.appendColumn(newColumn);
                     return boardRepository.save(board);
@@ -41,8 +41,8 @@ public class ColumnService {
                 .map(Optional::orElseThrow);
     }
 
-    public Mono<Void> removeColumnFromBoardAsUser(String columnId, String boardId, String userId) {
-        return boardService.getBoardForUser(boardId, userId)
+    public Mono<Void> removeColumnFromBoardAsUser(String columnId, String boardId, String username) {
+        return boardService.getBoardForUser(boardId, username)
                 .flatMap(board -> {
                     board.getColumns()
                             .stream()
@@ -59,8 +59,8 @@ public class ColumnService {
                 .then();
     }
 
-    public Mono<Void> reorderColumnAsUser(ColumnReorderRequestDTO reorderRequest, String userId) {
-        return boardService.getBoardForUser(reorderRequest.getBoardId(), userId)
+    public Mono<Void> reorderColumnAsUser(ColumnReorderRequestRQ reorderRequest, String username) {
+        return boardService.getBoardForUser(reorderRequest.getBoardId(), username)
                 .flatMap(board -> {
                     var columns = board.getColumns();
                     if (isRequestedIndexInvalid(columns, reorderRequest.getIndex())) {
