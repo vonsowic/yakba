@@ -9,7 +9,7 @@ import {Router} from "@angular/router";
 })
 export class AppComponent implements OnInit {
 
-  private username: String;
+  private username: string;
 
   constructor(private authService: AuthService, private router: Router) {
 
