@@ -7,7 +7,6 @@ import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.web.reactive.function.BodyInserters;
 
 import static org.hamcrest.Matchers.*;
@@ -35,7 +34,7 @@ class UserControllerTest extends AbstractIntegrationTest {
                 .exchange()
                 .expectStatus().isCreated();
 
-        var createdUser = userRepository.findFirstByUsername(request.getUsername()).block();
+        var createdUser = userRepository.findById(request.getUsername()).block();
         Assert.assertThat(createdUser, is(not(nullValue())));
         Assert.assertTrue(passwordEncoder.matches(request.getPassword(), createdUser.getPassword()));
     }
@@ -77,27 +76,6 @@ class UserControllerTest extends AbstractIntegrationTest {
                 .body(BodyInserters.fromObject(request))
                 .exchange()
                 .expectStatus().isBadRequest();
-    }
-
-    @Test
-    @WithMockUser(value = AbstractIntegrationTest.TESTER_ID)
-    public void shouldReturnUsernameByUserId() {
-        webClient.get()
-                .uri(BASE_URL + "/" + TESTER_ID)
-                .exchange()
-                .expectStatus().isOk()
-                .expectBody()
-                .jsonPath("$.username").isEqualTo(getTester().getUsername())
-                .jsonPath("$.email").isEmpty();
-    }
-
-    @Test
-    @WithMockUser(value = AbstractIntegrationTest.TESTER_ID)
-    public void shouldReturnNotFoundStatusWhenUserWithGivenIdDoesNotExist() {
-        webClient.get()
-                .uri(BASE_URL + "/SOME_USER_ID")
-                .exchange()
-                .expectStatus().isNotFound();
     }
 
 }

@@ -3,7 +3,6 @@ package io.bearcave.yakba.services;
 import io.bearcave.yakba.dao.UserRepository;
 import io.bearcave.yakba.dto.CreateUserRQ;
 import io.bearcave.yakba.exceptions.Conflict;
-import io.bearcave.yakba.exceptions.NotFound;
 import io.bearcave.yakba.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
@@ -37,10 +36,5 @@ public class UserService {
                 })
                 .then();
 
-    }
-
-    public Mono<User> findUsernameById(String userId) {
-        return userRepository.findUsernameById(userId)
-                .switchIfEmpty(Mono.error(NotFound::new));
     }
 }

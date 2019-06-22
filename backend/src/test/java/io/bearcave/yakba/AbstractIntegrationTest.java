@@ -17,7 +17,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 @SpringBootTest(classes = YakbaApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public abstract class AbstractIntegrationTest {
 
-    public static final String TESTER_ID = "ID";
+    public static final String TESTER_ID = "tester";
 
     private User tester;
 
@@ -35,8 +35,7 @@ public abstract class AbstractIntegrationTest {
         dropAll();
 
         tester = new User();
-        tester.setId(TESTER_ID);
-        tester.setUsername("test");
+        tester.setUsername(TESTER_ID);
         tester.setEmail("test@test.com");
         tester.setPassword("password");
         userRepository.insert(tester).block();

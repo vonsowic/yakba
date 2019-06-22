@@ -1,3 +1,22 @@
-<p>
-  login works!
-</p>
+<div>
+  <mat-form-field>
+    <input [(ngModel)]="username" matInput placeholder="Username">
+  </mat-form-field>
+
+  <mat-form-field>
+    <input [(ngModel)]="password"
+           [type]="hidePassword ? 'password' : 'text'"
+           matInput
+           placeholder="Password">
+    <button (click)="hidePassword = !hidePassword"
+            [attr.aria-label]="'Hide password'"
+            [attr.aria-pressed]="hidePassword"
+            mat-icon-button
+            matSuffix>
+      <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+    </button>
+  </mat-form-field>
+
+  <button (click)="login()" mat-button>Login</button>
+  <a routerLink="/register">Create an account</a>
+</div>
