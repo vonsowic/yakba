@@ -1,7 +1,16 @@
 <mat-toolbar id="main-menu">
   <span routerLink="/">YAKBA</span>
   <span class="fill-remaining-space"></span>
-  <span>{{username}}</span>
+
+  <span *ngIf="username; else loginButton" [matMenuTriggerFor]="menu">{{username}}
+    <mat-icon>arrow_drop_down</mat-icon></span>
+  <mat-menu #menu="matMenu">
+    <button (click)="logout()" mat-menu-item>Logout</button>
+  </mat-menu>
+
+  <ng-template #loginButton>
+    <span routerLink="/login">Log in</span>
+  </ng-template>
 </mat-toolbar>
 
 <router-outlet class="container"></router-outlet>

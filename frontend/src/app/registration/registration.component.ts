@@ -1,4 +1,7 @@
 import {Component, OnInit} from '@angular/core';
+import {AuthService} from "../services/auth.service";
+import {Router} from "@angular/router";
+import {SignUpRQ} from "../models";
 
 @Component({
   selector: 'app-registration',
@@ -7,10 +10,19 @@ import {Component, OnInit} from '@angular/core';
 })
 export class RegistrationComponent implements OnInit {
 
-  constructor() {
+  hidePassword = true;
+  signupForm = new SignUpRQ();
+
+  constructor(private authService: AuthService, private router: Router) {
   }
 
   ngOnInit() {
   }
 
+  createNewAccount() {
+    this.authService.register(this.signupForm)
+      .subscribe(() => {
+        this.router.navigateByUrl('/')
+      })
+  }
 }

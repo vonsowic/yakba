@@ -1,7 +1,8 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject, Observable} from "rxjs";
 import {HttpClient, HttpParams} from "@angular/common/http";
-import {tap} from "rxjs/operators";
+import {flatMap, tap} from "rxjs/operators";
+import {SignUpRQ} from "../models";
 
 @Injectable({
   providedIn: 'root'
@@ -43,6 +44,16 @@ export class AuthService {
         }));
   }
 
+  logout(): Observable<any> {
+    return this.http.get('/api/logout')
+  }
+
+  register(req: SignUpRQ): Observable<User> {
+    return this.http.post<void>('/api/user', req)
+      .pipe(
+        flatMap(() => this.loginUser(req.username, req.password))
+      )
+  }
 }
 
 class User {
