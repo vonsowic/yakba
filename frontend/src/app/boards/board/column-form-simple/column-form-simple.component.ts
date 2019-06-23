@@ -10,7 +10,7 @@ import {map} from "rxjs/operators";
 })
 export class ColumnFormSimpleComponent implements OnInit {
 
-  public columnName: string = '';
+  columnName: string = '';
 
   constructor(
     private route: ActivatedRoute,
