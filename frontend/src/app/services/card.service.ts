@@ -19,11 +19,11 @@ export class CardService {
   constructor(private http: HttpClient, private boardService: BoardsService) {
   }
 
-  public getCardDetails(boardId: string, cardId: string): Observable<Card> {
+  getCardDetails(boardId: string, cardId: string): Observable<Card> {
     return this.http.get<Card>(`${this.endpointBasePath}/${boardId}/card/${cardId}`);
   }
 
-  public createNewCard(boardId: string, card: CreateCardRQ): Observable<Card> {
+  createNewCard(boardId: string, card: CreateCardRQ): Observable<Card> {
     return this.http.post<Card>(`${this.endpointBasePath}/${boardId}/card`, card)
       .pipe(
         tap(newCard => this.boardService.pushCardToBoard(Object.assign({}, card, newCard) as CreateCardRQ)),
@@ -31,7 +31,7 @@ export class CardService {
       );
   }
 
-  public updateCard(boardId: string, updatedCard: Card): Observable<void> {
+  updateCard(boardId: string, updatedCard: Card): Observable<void> {
     return this.http.put<void>(`${this.endpointBasePath}/${boardId}/card/${updatedCard.id}`, updatedCard)
       .pipe(
         tap(() => {
@@ -40,11 +40,11 @@ export class CardService {
       );
   }
 
-  public moveCard(boardId: string, cardId: string, cardOrderUpdateRQ: CardOrderUpdateRQ): Observable<void> {
+  moveCard(boardId: string, cardId: string, cardOrderUpdateRQ: CardOrderUpdateRQ): Observable<void> {
     return this.http.put<void>(`${this.endpointBasePath}/${boardId}/card/${cardId}`, cardOrderUpdateRQ);
   }
 
-  public deleteCard(boardId: string, cardId: string): Observable<void> {
+  deleteCard(boardId: string, cardId: string): Observable<void> {
     return this.http.delete<void>(`${this.endpointBasePath}/${boardId}/card/${cardId}`)
       .pipe(
         tap(() => {

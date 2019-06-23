@@ -12,7 +12,7 @@ import {flatMap} from "rxjs/operators";
 })
 export class CardFormComponent extends BoardBaseComponent implements OnInit {
 
-  private card: Card = new Card();
+  card: Card = new Card();
 
   constructor(
     private cardService: CardService,

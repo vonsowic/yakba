@@ -23,7 +23,8 @@ public class YakbaWebSecurityConfiguration {
         return http
                 .authorizeExchange()
                 .pathMatchers(HttpMethod.POST, "/api/user").permitAll()
-                .anyExchange().authenticated()
+                .pathMatchers("/api/**").authenticated()
+                .pathMatchers(HttpMethod.GET, "/**").permitAll()
                 .and()
                 .csrf().disable()
                 .formLogin()

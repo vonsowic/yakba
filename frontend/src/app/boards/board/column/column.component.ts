@@ -16,10 +16,10 @@ import {ColumnService} from "../../../services/column.service";
 export class ColumnComponent extends BoardBaseComponent implements OnInit {
 
   @Input()
-  public column: Column;
+  column: Column;
 
   @ViewChild(CardFormSimpleComponent, {static: false})
-  public addCardForm: CardFormSimpleComponent;
+  addCardForm: CardFormSimpleComponent;
 
   constructor(
     private cardService: CardService,

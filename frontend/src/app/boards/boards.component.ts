@@ -12,8 +12,8 @@ import {filter, flatMap} from "rxjs/operators";
 })
 export class BoardsComponent implements OnInit {
 
-  public boards: Board[] = [];
-  private loading = true;
+  boards: Board[] = [];
+  loading = true;
 
   constructor(private boardsService: BoardsService, public dialog: MatDialog) {
   }
@@ -26,7 +26,7 @@ export class BoardsComponent implements OnInit {
       })
   }
 
-  public openNewBoardModal() {
+  openNewBoardModal() {
     const dialogRef = this.dialog.open(NewBoardModalComponent, {
       width: '250px',
       data: {name: ''}

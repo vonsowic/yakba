@@ -18,6 +18,7 @@
     <modules>
         <module>backend</module>
         <module>frontend</module>
+        <module>bundle</module>
     </modules>
 
 </project>

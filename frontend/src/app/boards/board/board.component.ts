@@ -13,8 +13,8 @@ import {CardService} from "../../services/card.service";
 })
 export class BoardComponent extends BoardBaseComponent implements OnInit, OnDestroy {
 
-  private board: Board;
-  private displayCardDrawer = false;
+  board: Board;
+  displayCardDrawer = false;
 
   constructor(
     route: ActivatedRoute,

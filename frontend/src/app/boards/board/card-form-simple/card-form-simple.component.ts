@@ -12,12 +12,12 @@ import {BoardBaseComponent} from "../../BoardBaseComponent";
 export class CardFormSimpleComponent extends BoardBaseComponent implements OnInit {
 
   @Input()
-  public columnId: string;
+  columnId: string;
 
   @Input()
-  public show = false;
+  show = false;
 
-  private cardTitle: string = '';
+  cardTitle: string = '';
 
   constructor(
     private cardService: CardService,
@@ -29,7 +29,7 @@ export class CardFormSimpleComponent extends BoardBaseComponent implements OnIni
   ngOnInit() {
   }
 
-  public addCard() {
+  addCard() {
     const createCardRQ = new CreateCardRQ();
     createCardRQ.columnId = this.columnId;
     createCardRQ.title = this.cardTitle;
@@ -38,17 +38,15 @@ export class CardFormSimpleComponent extends BoardBaseComponent implements OnIni
       .subscribe(boardId => {
         return this.cardService.createNewCard(boardId, createCardRQ)
           .subscribe(
-            res => {
+            () => {
               this.cardTitle = '';
               this.show = false;
-            },
-            err => {
             }
           )
       })
   }
 
-  public hide() {
+  hide() {
     this.show = false;
   }
 

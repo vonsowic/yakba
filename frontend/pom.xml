@@ -20,6 +20,7 @@
           <nodeVersion>v11.15.0</nodeVersion>
           <npmVersion>6.9.0</npmVersion>
           <workingDirectory>.</workingDirectory>
+          <installDirectory>target</installDirectory>
         </configuration>
         <executions>
           <execution>
@@ -56,26 +57,26 @@
         </executions>
       </plugin>
 
-      <plugin>
-        <artifactId>maven-resources-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>copy-resources</id>
-            <phase>validate</phase>
-            <goals>
-              <goal>copy-resources</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>${project.build.directory}/classes/resources/</outputDirectory>
-              <resources>
-                <resource>
-                  <directory>${project.parent.basedir}/dist/frontend</directory>
-                </resource>
-              </resources>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
+      <!--<plugin>-->
+      <!--<artifactId>maven-resources-plugin</artifactId>-->
+      <!--<executions>-->
+      <!--<execution>-->
+      <!--<id>copy-resources</id>-->
+      <!--<phase>validate</phase>-->
+      <!--<goals>-->
+      <!--<goal>copy-resources</goal>-->
+      <!--</goals>-->
+      <!--<configuration>-->
+      <!--<outputDirectory>../backend/target/classes/dist/</outputDirectory>-->
+      <!--<resources>-->
+      <!--<resource>-->
+      <!--<directory>./target/dist</directory>-->
+      <!--</resource>-->
+      <!--</resources>-->
+      <!--</configuration>-->
+      <!--</execution>-->
+      <!--</executions>-->
+      <!--</plugin>-->
     </plugins>
   </build>
 

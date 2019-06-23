@@ -1,40 +1,41 @@
 export class Board {
-  public id: string;
-  public name: string;
-  public columns: Column[] = [];
+  id: string;
+  name: string;
+  columns: Column[] = [];
 }
 
 export class Column {
-  public id: string;
-  public cards: Card[] = [];
+  id: string;
+  name: string;
+  cards: Card[] = [];
 }
 
 export class ColumnOrderUpdateRQ {
-  public index: number;
+  index: number;
 }
 
 export class Card {
-  public id: string = '';
-  public title: string = '';
-  public content: string = '';
+  id: string = '';
+  title: string = '';
+  content: string = '';
 }
 
 export class CreateCardRQ extends Card {
-  public columnId: string;
+  columnId: string;
 }
 
 export class CardOrderUpdateRQ {
-  public prevPos: CardPosition = new CardPosition();
-  public nextPos: CardPosition = new CardPosition();
+  prevPos: CardPosition = new CardPosition();
+  nextPos: CardPosition = new CardPosition();
 }
 
 export class CardPosition {
-  public columnId: string;
-  public index: number = 0;
+  columnId: string;
+  index: number = 0;
 }
 
 export class SignUpRQ {
-  public username: string;
-  public email: string;
-  public password: string;
+  username: string;
+  email: string;
+  password: string;
 }
