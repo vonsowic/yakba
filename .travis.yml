@@ -5,8 +5,3 @@ jdk:
 services:
   - mongodb
 
-deploy:
-  provider: script
-  script: bash heroku-build-and-deploy.sh
-  on:
-    branch: master
