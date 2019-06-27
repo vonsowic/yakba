@@ -1,4 +1,4 @@
-<mat-drawer-container [hasBackdrop]="false" class="example-container">
+<mat-drawer-container [hasBackdrop]="false" class="container">
 
   <mat-drawer-content>
     <mat-spinner *ngIf="!board; else boardLoaded"></mat-spinner>
@@ -15,7 +15,7 @@
     </ng-template>
   </mat-drawer-content>
 
-  <mat-drawer #drawer [mode]="'side'" [opened]="displayCardDrawer" position="end">
+  <mat-drawer [mode]="'side'" [opened]="displayCardDrawer" position="end">
     <app-card-form></app-card-form>
   </mat-drawer>
 
