@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.test.context.support.WithMockUser;
 
 import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertThat;
 
 class BoardsUsersAdminPanelControllerTest extends AbstractBoardIntegrationTest {
@@ -55,4 +56,36 @@ class BoardsUsersAdminPanelControllerTest extends AbstractBoardIntegrationTest {
                 .expectStatus().isEqualTo(HttpStatus.CONFLICT);
     }
 
+    @Test
+    @WithMockUser(TESTER2_ID)
+    void userCanLeaveBoardWheneverTheyWant() {
+        webClient.delete()
+                .uri(String.format("/api/board/%s/admin/user/%s", board.getId(), TESTER2_ID))
+                .exchange()
+                .expectStatus().isNoContent();
+
+        var updatedBoard = boardRepository.findByIdWithoutCardDetails(board.getId()).block();
+        assertThat(updatedBoard.getAccesses(), not(hasItem(new UserBoardAccess(TESTER2_ID))));
+    }
+
+    @Test
+    @WithMockUser(TESTER_ID)
+    void adminCanRemoveUserFromBoard() {
+        webClient.delete()
+                .uri(String.format("/api/board/%s/admin/user/%s", board.getId(), TESTER2_ID))
+                .exchange()
+                .expectStatus().isNoContent();
+
+        var updatedBoard = boardRepository.findByIdWithoutCardDetails(board.getId()).block();
+        assertThat(updatedBoard.getAccesses(), not(hasItem(new UserBoardAccess(TESTER2_ID))));
+    }
+
+    @Test
+    @WithMockUser(TESTER3_ID)
+    void normalUserIsNotAllowedToRemoveAnotherUser() {
+        webClient.delete()
+                .uri(String.format("/api/board/%s/admin/user/%s", board.getId(), TESTER2_ID))
+                .exchange()
+                .expectStatus().isForbidden();
+    }
 }

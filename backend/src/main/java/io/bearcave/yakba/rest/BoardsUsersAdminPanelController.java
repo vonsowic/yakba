@@ -29,4 +29,14 @@ public class BoardsUsersAdminPanelController {
         return boardsUsersAdminPanelService.addUserToBoardAsAdmin(boardId, userToBeAdded, user.getName());
     }
 
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/{username}")
+    public Mono<Void> removeUserFromBoard(
+            @PathVariable String boardId,
+            @PathVariable("username") String userToBeRemoved,
+            Principal user
+    ) {
+        return boardsUsersAdminPanelService.removeUserFromBoardAsUser(userToBeRemoved, boardId, user.getName());
+    }
+
 }
