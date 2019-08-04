@@ -2,6 +2,7 @@ package io.bearcave.yakba.rest;
 
 import io.bearcave.yakba.exceptions.BadRequest;
 import io.bearcave.yakba.models.Board;
+import io.bearcave.yakba.models.UserBoardAccess;
 import io.bearcave.yakba.services.BoardService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.security.Principal;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -32,6 +34,11 @@ public class BoardsController {
     @GetMapping
     public Flux<Board> getUsersBoards(Principal user) {
         return boardService.getBoardsForUser(user.getName());
+    }
+
+    @GetMapping("/{boardId}/user")
+    public Mono<List<UserBoardAccess>> getUsersOfBoardWithRoles(@PathVariable String boardId) {
+        return boardService.getUsersOfBoard(boardId);
     }
 
     @PostMapping

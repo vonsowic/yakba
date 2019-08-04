@@ -1,12 +1,11 @@
 package io.bearcave.yakba.rest;
 
+import io.bearcave.yakba.AbstractBoardIntegrationTest;
 import io.bearcave.yakba.AbstractIntegrationTest;
-import io.bearcave.yakba.dao.BoardRepository;
 import io.bearcave.yakba.models.Board;
 import net.minidev.json.JSONArray;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.web.reactive.function.BodyInserters;
 
@@ -16,10 +15,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 
 @WithMockUser(value = AbstractIntegrationTest.TESTER_ID)
-class BoardsControllerTest extends AbstractIntegrationTest {
-
-    @Autowired
-    private BoardRepository boardRepository;
+class BoardsControllerTest extends AbstractBoardIntegrationTest {
 
     @Test
     void shouldReturnOneBoardById() {
@@ -56,8 +52,9 @@ class BoardsControllerTest extends AbstractIntegrationTest {
     }
 
     @Test
+    @WithMockUser(value = AbstractIntegrationTest.TESTER2_ID)
     void returnsBoardForWhichUserHasAccessWithoutColumns() {
-        var board = new Board("XYZ", TESTER_ID);
+        var board = new Board("XYZ", TESTER2_ID);
         boardRepository.insert(board)
                 .block();
 
@@ -126,4 +123,32 @@ class BoardsControllerTest extends AbstractIntegrationTest {
                 .expectStatus().isForbidden();
     }
 
+    @Test
+    void shouldReturnAllUsersOfBoardWithTheirsRoles() {
+        var user1 = createUser("user1").block();
+        addUserToBoard(user1);
+
+        var user2 = createUser("user2").block();
+        addUserToBoard(user2);
+
+        webClient.get()
+                .uri("/api/board/" + board.getId() + "/user")
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody()
+                .jsonPath("$[0].userId").isEqualTo(TESTER_ID)
+                .jsonPath("$[0].accessLevel").isEqualTo("ADMIN")
+                .jsonPath("$[1].userId").isEqualTo("user1")
+                .jsonPath("$[1].accessLevel").isEqualTo("USER")
+                .jsonPath("$[2].userId").isEqualTo("user2")
+                .jsonPath("$[2].accessLevel").isEqualTo("USER");
+    }
+
+    @Test
+    void shouldReturnNotFoundStatusWhenBoardDoesNotExist() {
+        webClient.get()
+                .uri("/api/board/XXX/user")
+                .exchange()
+                .expectStatus().isNotFound();
+    }
 }
