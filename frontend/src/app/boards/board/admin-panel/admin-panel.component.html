@@ -1,0 +1,36 @@
+<button (click)="goBackToBoard()" mat-button>< BACK</button>
+
+<mat-card class="remove-board-card">
+  <mat-card-title>Remove board</mat-card-title>
+  <mat-card-subtitle>This action will remove board permanently. There is no additional "Are you sure" modal.
+  </mat-card-subtitle>
+
+  <mat-card-actions>
+    <button (click)="removeBoard()" mat-raised-button>Remove board</button>
+  </mat-card-actions>
+</mat-card>
+
+<hr/>
+
+<mat-card class="board-card">
+  <mat-card-title>Board members</mat-card-title>
+
+  <mat-card-content>
+    <mat-form-field>
+      <input (keydown.enter)="addUser()" [(ngModel)]="newUsername" matInput placeholder="Add new user...">
+      <button (click)="addUser()" *ngIf="newUsername" mat-button mat-icon-button matSuffix>
+        <mat-icon>add</mat-icon>
+      </button>
+    </mat-form-field>
+
+    <mat-list>
+      <mat-list-item *ngFor="let userAccess of userBoardAccesses">
+        {{userAccess.userId}}
+        <mat-icon *ngIf="userAccess.accessLevel === 'ADMIN'">star</mat-icon>
+        <mat-icon (click)="removeUser(userAccess.userId)">delete</mat-icon>
+      </mat-list-item>
+    </mat-list>
+
+  </mat-card-content>
+
+</mat-card>

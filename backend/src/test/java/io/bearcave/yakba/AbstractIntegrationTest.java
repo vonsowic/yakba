@@ -18,8 +18,8 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 public abstract class AbstractIntegrationTest {
 
     public static final String TESTER_ID = "tester";
-
-    private User tester;
+    public static final String TESTER2_ID = "tester2";
+    public static final String TESTER3_ID = "tester3";
 
     @Autowired
     protected WebTestClient webClient;
@@ -34,11 +34,17 @@ public abstract class AbstractIntegrationTest {
     public void setUp() {
         dropAll();
 
-        tester = new User();
+        User tester = new User();
         tester.setUsername(TESTER_ID);
         tester.setEmail("test@test.com");
         tester.setPassword("password");
         userRepository.insert(tester).block();
+
+        User tester2 = new User();
+        tester2.setUsername(TESTER2_ID);
+        tester2.setEmail("test2@test.com");
+        tester2.setPassword("password");
+        userRepository.insert(tester2).block();
     }
 
     @AfterEach
@@ -50,9 +56,5 @@ public abstract class AbstractIntegrationTest {
         mongoTemplate.dropCollection(Board.class);
         mongoTemplate.dropCollection(User.class);
         mongoTemplate.dropCollection(UserBoardAccess.class);
-    }
-
-    protected User getTester() {
-        return tester;
     }
 }

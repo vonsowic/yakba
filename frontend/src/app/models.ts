@@ -39,3 +39,8 @@ export class SignUpRQ {
   email: string;
   password: string;
 }
+
+export class UserBoardAccessRS {
+  userId: string;
+  accessLevel: 'USER' | 'ADMIN'
+}

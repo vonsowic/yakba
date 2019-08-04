@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
 
@@ -37,6 +38,26 @@ public class BoardService {
                 .switchIfEmpty(Mono.error(() -> new NotFound(String.format("Board %s does not exist", boardId))))
                 .map(board -> {
                     if (!hasUserAccess(board, username)) {
+                        throw new Forbidden(String.format(
+                                "User %s does not have access to %s[%s]", username, board.getName(), board.getId()
+                        ));
+                    }
+
+                    return board;
+                });
+    }
+
+    public Mono<List<UserBoardAccess>> getUsersOfBoard(String boardId) {
+        return boardRepository.findByIdWithoutCardDetails(boardId)
+                .switchIfEmpty(Mono.error(() -> new NotFound(String.format("Board %s does not exist", boardId))))
+                .map(Board::getAccesses);
+    }
+
+    public Mono<Board> getBoardForAdminWithoutDetails(String boardId, String username) {
+        return boardRepository.findByIdWithoutCardDetails(boardId)
+                .switchIfEmpty(Mono.error(() -> new NotFound(String.format("Board %s does not exist", boardId))))
+                .map(board -> {
+                    if (!hasUserAdminAccess(board, username)) {
                         throw new Forbidden(String.format(
                                 "User %s does not have access to %s[%s]", username, board.getName(), board.getId()
                         ));

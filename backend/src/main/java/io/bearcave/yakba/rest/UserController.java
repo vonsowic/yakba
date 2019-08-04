@@ -37,6 +37,7 @@ public class UserController {
             throw new BadRequest();
         }
 
-        return userService.registerNewUser(createUserRQ);
+        return userService.registerNewUser(createUserRQ)
+                .then();
     }
 }

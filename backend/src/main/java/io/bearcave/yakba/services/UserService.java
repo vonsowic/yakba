@@ -22,7 +22,7 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public Mono<Void> registerNewUser(CreateUserRQ createUserRQ) {
+    public Mono<User> registerNewUser(CreateUserRQ createUserRQ) {
         var encodedPassword = passwordEncoder.encode(createUserRQ.getPassword());
 
         var user = new User();
@@ -33,8 +33,6 @@ public class UserService {
         return userRepository.insert(user)
                 .doOnError(DuplicateKeyException.class, e -> {
                     throw new Conflict("Username or email already exist");
-                })
-                .then();
-
+                });
     }
 }
