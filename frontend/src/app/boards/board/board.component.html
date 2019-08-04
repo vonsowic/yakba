@@ -2,6 +2,8 @@
 
   <mat-drawer-content>
     <mat-spinner *ngIf="!board; else boardLoaded"></mat-spinner>
+    <mat-icon (click)="goToSettings()" class="settings-button">settings</mat-icon>
+
     <ng-template #boardLoaded>
       <div cdkDropListGroup class="dashboard">
         <div *ngFor="let column of board.columns">

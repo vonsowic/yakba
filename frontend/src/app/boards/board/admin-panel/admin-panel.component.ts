@@ -59,4 +59,11 @@ export class AdminPanelComponent extends BoardBaseComponent implements OnInit {
         this.router.navigateByUrl('/')
       })
   }
+
+  goBackToBoard() {
+    this.getBoardId()
+      .subscribe(boardId => {
+        this.router.navigateByUrl(`/board/${boardId}`)
+      })
+  }
 }

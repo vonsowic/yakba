@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {BoardsService} from "../../services/boards.service";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {flatMap} from "rxjs/operators";
 import {Board} from "../../models";
 import {BoardBaseComponent} from "../BoardBaseComponent";
@@ -18,6 +18,7 @@ export class BoardComponent extends BoardBaseComponent implements OnInit, OnDest
 
   constructor(
     route: ActivatedRoute,
+    private router: Router,
     private boardService: BoardsService,
     private cardService: CardService,
   ) {
@@ -45,5 +46,10 @@ export class BoardComponent extends BoardBaseComponent implements OnInit, OnDest
       .subscribe(card => {
         this.displayCardDrawer = card.id != '';
       })
+  }
+
+  goToSettings() {
+    this.getBoardId()
+      .subscribe(boardId => this.router.navigateByUrl(`/board/${boardId}/settings`));
   }
 }
