@@ -19,6 +19,7 @@ public abstract class AbstractIntegrationTest {
 
     public static final String TESTER_ID = "tester";
     public static final String TESTER2_ID = "tester2";
+    public static final String TESTER3_ID = "tester3";
 
     @Autowired
     protected WebTestClient webClient;
@@ -40,9 +41,9 @@ public abstract class AbstractIntegrationTest {
         userRepository.insert(tester).block();
 
         User tester2 = new User();
-        tester.setUsername(TESTER2_ID);
-        tester.setEmail("test2@test.com");
-        tester.setPassword("password");
+        tester2.setUsername(TESTER2_ID);
+        tester2.setEmail("test2@test.com");
+        tester2.setPassword("password");
         userRepository.insert(tester2).block();
     }
 

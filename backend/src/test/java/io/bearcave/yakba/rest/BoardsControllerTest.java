@@ -52,9 +52,9 @@ class BoardsControllerTest extends AbstractBoardIntegrationTest {
     }
 
     @Test
-    @WithMockUser(value = AbstractIntegrationTest.TESTER2_ID)
+    @WithMockUser(value = AbstractIntegrationTest.TESTER3_ID)
     void returnsBoardForWhichUserHasAccessWithoutColumns() {
-        var board = new Board("XYZ", TESTER2_ID);
+        var board = new Board("XYZ", TESTER3_ID);
         boardRepository.insert(board)
                 .block();
 
@@ -138,10 +138,12 @@ class BoardsControllerTest extends AbstractBoardIntegrationTest {
                 .expectBody()
                 .jsonPath("$[0].userId").isEqualTo(TESTER_ID)
                 .jsonPath("$[0].accessLevel").isEqualTo("ADMIN")
-                .jsonPath("$[1].userId").isEqualTo("user1")
+                .jsonPath("$[1].userId").isEqualTo(TESTER2_ID)
                 .jsonPath("$[1].accessLevel").isEqualTo("USER")
-                .jsonPath("$[2].userId").isEqualTo("user2")
-                .jsonPath("$[2].accessLevel").isEqualTo("USER");
+                .jsonPath("$[2].userId").isEqualTo("user1")
+                .jsonPath("$[2].accessLevel").isEqualTo("USER")
+                .jsonPath("$[3].userId").isEqualTo("user2")
+                .jsonPath("$[3].accessLevel").isEqualTo("USER");
     }
 
     @Test

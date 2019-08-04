@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public abstract class AbstractBoardIntegrationTest extends AbstractIntegrationTest {
 
@@ -28,6 +29,7 @@ public abstract class AbstractBoardIntegrationTest extends AbstractIntegrationTe
     public void setUp() {
         super.setUp();
         this.board = new Board("TEST_BOARD", TESTER_ID);
+        board.setAccesses(List.of(board.getAccesses().get(0), new UserBoardAccess(TESTER2_ID)));
         updateTestBoard();
     }
 
