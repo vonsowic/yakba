@@ -36,6 +36,7 @@ import {ColumnFormSimpleComponent} from './boards/board/column-form-simple/colum
 import {RegistrationComponent} from './registration/registration.component';
 import {LoginComponent} from './login/login.component';
 import {AuthInterceptor} from "./auth-interceptor.service";
+import {AdminPanelComponent} from './boards/board/admin-panel/admin-panel.component';
 
 @NgModule({
   declarations: [
@@ -49,7 +50,8 @@ import {AuthInterceptor} from "./auth-interceptor.service";
     CardFormSimpleComponent,
     ColumnFormSimpleComponent,
     RegistrationComponent,
-    LoginComponent
+    LoginComponent,
+    AdminPanelComponent
   ],
   imports: [
     BrowserModule,

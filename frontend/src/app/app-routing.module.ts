@@ -6,6 +6,7 @@ import {BoardComponent} from "./boards/board/board.component";
 import {NotFoundComponent} from "./not-found/not-found.component";
 import {RegistrationComponent} from "./registration/registration.component";
 import {LoginComponent} from "./login/login.component";
+import {AdminPanelComponent} from "./boards/board/admin-panel/admin-panel.component";
 
 const routes: Routes = [{
   path: '', pathMatch: 'full', redirectTo: 'board'
@@ -17,6 +18,8 @@ const routes: Routes = [{
   path: 'register', component: RegistrationComponent
 }, {
   path: 'board/:boardId', component: BoardComponent
+}, {
+  path: 'board/:boardId/settings', component: AdminPanelComponent
 }, {
   path: '**', component: NotFoundComponent
 }];

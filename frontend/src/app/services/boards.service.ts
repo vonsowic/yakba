@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {Board, Card, Column, CreateCardRQ} from "../models";
+import {Board, Card, Column, CreateCardRQ, UserBoardAccessRS} from "../models";
 import {BehaviorSubject, Observable, of} from "rxjs";
 import {NavigationService} from "./navigation.service";
 import {catchError, map} from "rxjs/operators";
@@ -113,5 +113,21 @@ export class BoardsService {
     const board = this._currentBoard.getValue();
     arrayMove.mutate(board.columns, this.getColumnIndex(columnId), newPosition);
     this._currentBoard.next(board)
+  }
+
+  getUsersOfBoard(boardId: string): Observable<UserBoardAccessRS[]> {
+    return this.http.get<UserBoardAccessRS[]>(`/api/board/${boardId}/user`);
+  }
+
+  removeUserFromBoard(userId: string, boardId: string) {
+    return this.http.delete(`/api/board/${boardId}/admin/user/${userId}`);
+  }
+
+  addUserToBoard(username: string, boardId: string): Observable<any> {
+    return this.http.post(`/api/board/${boardId}/admin/user/${username}`, {});
+  }
+
+  removeBoard(boardId: string): Observable<any> {
+    return this.http.delete(`/api/board/${boardId}`);
   }
 }
